@@ -8,4 +8,4 @@ Requirements:
 	- MongoDb: http://www.mongodb.org/
 	- node-mongodb-native: https://github.com/christkv/node-mongodb-native
 	- Connect: http://senchalabs.github.com/connect/
-	
+	- nodeunit: https://github.com/caolan/nodeunit
