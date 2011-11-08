@@ -1,11 +1,21 @@
 Flat white (http://en.wikipedia.org/wiki/Flat_white)
 
-Node.js + MongoDb REST api only CMS... HTML, CSS, MVC?! No way, Jose!
+Node.js REST api only CMS... HTML, CSS, MVC?! No way, Jose!
 
 Requirements:
 
 	- Node.js: http://nodejs.org/
-	- MongoDb: http://www.mongodb.org/
-	- node-mongodb-native: https://github.com/christkv/node-mongodb-native
 	- Connect: http://senchalabs.github.com/connect/
 	- nodeunit: https://github.com/caolan/nodeunit
+	
+Database:
+
+	MongoDb
+	
+		- MongoDb: http://www.mongodb.org/
+		- node-mongodb-native: https://github.com/christkv/node-mongodb-native
+		
+	Redis
+	
+		- Redis: http://redis.io/
+		- node-redis: https://github.com/mranney/node_redis
