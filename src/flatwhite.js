@@ -2,12 +2,11 @@ var connect = require('connect'),
     config = require('./config');
 
 var loader = function(method, req, res, next) {
-    
     console.log(method + " - version: " + req.params.version + 
         ", module: " + req.params.module + 
         ", item: " + req.params.item + 
         ", operation: " + req.params.operation);
-                
+    
     _module = require("./modules/" + req.params.module);
     _module.execute(method, req, res, next);
 };
