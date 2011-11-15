@@ -14,6 +14,13 @@ var loader = function(method, req, res, next) {
 //create server
 var server = connect.createServer();
 
+//authentication
+if(config.auth) {
+    console.log("authentication: " + config.auth);
+    _auth = require("./modules/auth/" + config.auth);
+    server.use('/', _auth.authenticate);
+}
+
 //set routes
 server.use('/',
     connect.router(function(app){

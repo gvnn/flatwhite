@@ -9,6 +9,7 @@ var repository = {
         this.client = new Db('test', new Server("127.0.0.1", 27017, {}));
 	},
     
+    //TODO: wrong, create a generic method for add
     add_admin: function (a, c) {
         var self = this;
         var callback = c;

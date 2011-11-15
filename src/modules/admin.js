@@ -9,7 +9,7 @@ var admin = {
 
     add: function(res) {
         var self = this;
-        //whatever parameters
+        //TODO: completely wrong. send object and collection to a generic "add" method
         data.instance().add_admin({email: "info@gvnn.it", password: "", active: true}, function(err, docs) {
             if(err) {
                 utils.response_err(res, err);

@@ -12,6 +12,7 @@ var config = {
         show_stack: true,
         dump_exceptions: true
     },
+    auth: 'basicDatabase',
     data: {
         selected_repository: 0,
         repositories: [{
