@@ -1,6 +1,6 @@
-Flat white (http://en.wikipedia.org/wiki/Flat_white)
+Flatwhite (http://en.wikipedia.org/wiki/Flat_white)
 
-Node.js REST api only CMS... HTML, CSS, MVC?! No way, Jose!
+Node.js REST API ONLY CMS... HTML, CSS, MVC?! No way, Jose!
 
 Requirements:
 
@@ -19,3 +19,25 @@ Database:
 
 		- CouchDB
 		- Redis?
+		
+The idea:
+
+Flatwhite is a very simple CMS API. Developers can define the content item structure and categorize it associating tags to it... That's it!
+
+
+Build modules:
+
+Flatwhite allows you to write the modules that you like, it's all in the routing:
+
+/:version([0-9]+)/:module([a-z]+)/:item([a-z0-9]+)?/:operation([a-z]+)?
+
+the main function checks which module has to be called and loads the module's file in the modules folder, for example posting
+a request to "/1/admin" will load the admin.js module. Modules must implement the "execute" method, called by the main process.
+
+Database modules:
+
+Flatwhite implements a very simple data abstraction layer. Similar to modules the "driver" has to be saved in the 
+modules/data folder and has to implement:
+	
+	- "setup": method called at load
+	- "collection": object that expose the operations available on the collection (add, delete, update, search)
