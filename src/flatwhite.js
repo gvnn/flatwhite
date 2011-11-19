@@ -1,12 +1,12 @@
 var connect = require('connect'),
-    config = require('./config');
+    config = require('./config'),
+    utils = require("./utils");
 
 var loader = function(method, req, res, next) {
-    console.log(method + " - version: " + req.params.version + 
+    utils.log(method + " - version: " + req.params.version + 
         ", module: " + req.params.module + 
         ", item: " + req.params.item + 
         ", operation: " + req.params.operation);
-    
     _module = require("./modules/" + req.params.module);
     _module.execute(method, req, res, next);
 };
@@ -14,31 +14,34 @@ var loader = function(method, req, res, next) {
 //create server
 var server = connect.createServer();
 
-//authentication
+//check authentication required
 if(config.auth) {
     console.log("authentication: " + config.auth);
     _auth = require("./modules/auth/" + config.auth);
     server.use('/', _auth.authenticate);
 }
 
+//add body parser for post
+server.use(connect.bodyParser());
+
 //set routes
 server.use('/',
-    connect.router(function(app){
-        _path = "/:version([0-9]+)/:module([a-z]+)/:item([a-z0-9]+)/:operation([a-z]+)?";
+    connect.router(function(app) {
+        _path = "/:version([0-9]+)/:module([a-z]+)/:item([a-z0-9]+)?/:operation([a-z]+)?";
         //Post -> Create
-        app.post(_path, function(req, res, next){
+        app.post(_path, function(req, res, next) {
             loader("post", req, res, next);
         });
         //Get -> Read
-        app.get(_path, function(req, res, next){
+        app.get(_path, function(req, res, next) {
             loader("get", req, res, next);
         });
         //Put -> Update
-        app.put(_path, function(req, res, next){
+        app.put(_path, function(req, res, next) {
             loader("put", req, res, next);
         });
         //Delete -> Delete
-        app.del(_path, function(req, res, next){
+        app.del(_path, function(req, res, next) {
             loader("delete", req, res, next);
         });
     })
@@ -49,4 +52,4 @@ server.use(connect.errorHandler({ showStack: config.errors.show_stack, dumpExcep
 
 //start server
 server.listen(config.server.port);
-console.log("flatwhite started on port " + config.server.port);
+utils.log("flatwhite started on port " + config.server.port);

@@ -1,28 +1,40 @@
 var mongodb = process.env['TEST_NATIVE'] != null ? require('mongodb').native() : require('mongodb').pure();
 var Db = mongodb.Db, Server = mongodb.Server;
 var config = require("../../config");
+var utils = require("../../utils");
 
 var repository = {
     
     setup: function() {
 	    this.db_conf = config.data.repositories[config.data.selected_repository];
-        this.client = new Db('test', new Server("127.0.0.1", 27017, {}));
+        this.client = new Db(this.db_conf.db, new Server(this.db_conf.server, this.db_conf.port, {}));
 	},
-    
-    //TODO: wrong, create a generic method for add
-    add_admin: function (a, c) {
-        var self = this;
-        var callback = c;
-        var admin = a;
-        self.client.open(function(err, p_client) {
-            self.client.collection('admins', function (err, collection) {
-                collection.insert(admin, function(err, docs) {
-                    self.client.close();
-                    callback(err, docs);
-                });
-            });
-        });
-    }
+	
+	collection: function(name) {
+	    
+	    var self = this;
+	    var collection_name = config.data.collections_prefix + name;
+	    
+	    //collection object
+	    var coll = {
+	        add: function(o, c) {
+	            var obj = o;
+                var callback = c;
+                self.client.open(function(err, p_client) {
+                    utils.log("collection selected: " + collection_name);
+                    self.client.collection(collection_name, function (err, coll) {
+                        coll.insert(obj, function(err, docs) {
+                            self.client.close();
+                            //the returned object is a collection
+                            //returns the first item
+                            callback(err, docs[0]);
+                        });
+                    });
+                });                
+	        }
+	    };
+        return coll;
+	}
 }
 
 module.exports = repository;

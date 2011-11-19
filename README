@@ -14,8 +14,8 @@ Database:
 	
 		- MongoDb: http://www.mongodb.org/
 		- node-mongodb-native: https://github.com/christkv/node-mongodb-native
-		
-	Redis
-	
-		- Redis: http://redis.io/
-		- node-redis: https://github.com/mranney/node_redis
+
+	DB Whish list:
+
+		- CouchDB
+		- Redis?
