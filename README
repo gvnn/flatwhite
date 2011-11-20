@@ -2,49 +2,67 @@ Flatwhite (http://en.wikipedia.org/wiki/Flat_white)
 
 Node.js REST API ONLY CMS... HTML, CSS, MVC?! No way, Jose!
 
-Requirements:
+Requirements
+-------------
 
-	- Node.js: http://nodejs.org/
-	- Connect: http://senchalabs.github.com/connect/
-	- nodeunit: https://github.com/caolan/nodeunit
-	
-Database:
+  Node.js: http://nodejs.org/
+  Connect: http://senchalabs.github.com/connect/
+  nodeunit: https://github.com/caolan/nodeunit
 
-	MongoDb
-	
-		- MongoDb: http://www.mongodb.org/
-		- node-mongodb-native: https://github.com/christkv/node-mongodb-native
+Database
+-------------
 
-	DB Whish list:
+  MongoDb:
+    
+    MongoDb: http://www.mongodb.org/
+    node-mongodb-native: https://github.com/christkv/node-mongodb-native
 
-		- CouchDB
-		- Redis?
-		
-The idea:
+  DB Whish list:
+
+    CouchDB
+    Redis?
+
+The idea
+-------------
 
 Flatwhite is a very simple CMS API... That's it!
 
-	Version 1: 
-	Provide basic authentication and basic CMS. A content item has only Title, Summary, Text and Image properties. A content Item can have one or more Tags.
-	
-	Version 2:
-	Optional custom fields for content items, related content and more than on picture per item.
-	
-	Version x:
-	Is it really necessary?
-	
+  Version 1
+  Provide basic authentication and basic CMS. A content item has only Title,
+  Summary, Text and Image properties. A content Item can have one or more
+  Tags.
 
-Build modules:
+  Version 2
+  Optional custom fields for content items, related content and more than one
+  picture per item.
 
-Flatwhite allows you to write the modules that you like, it's all in the routing:
+  Version x
+  Is it really necessary?
+
+Build modules
+-------------
+
+Flatwhite allows you to write the modules that you like, it's all in the 
+routing:
 
 /:version([0-9]+)/:module([a-z]+)/:item([a-z0-9]+)?/:operation([a-z]+)?
 
-The main function checks which module has to be called and loads the module's file in the modules folder, for example posting a request to "/1/admin" will load the admin.js module. Modules must implement the "execute" method, called by the main process.
+The main function checks which module has to be called and loads the module's
+file in the modules folder, for example posting a request to "/1/admin" will
+load the admin.js module. Modules must implement the "execute" method, called
+by the main process.
 
-Database modules:
+Database modules
+-------------
 
-Flatwhite implements a very simple data abstraction layer. Similar to modules the "driver" has to be saved in the modules/data folder and has to implement:
-	
-	- "setup": method called at load
-	- "collection": object that expose the operations available on the collection (add, delete, update, search)
+Flatwhite implements a very simple data abstraction layer. Similar to modules
+the "driver" has to be saved in the modules/data folder and has to implement:
+
+  "setup": method called at load
+  "collection": object that expose the operations available on the collection
+  (add, delete, update, search)
+  
+Debug
+-------------
+
+node-inspector --web-port=8081  & node --debug flatwhite.js

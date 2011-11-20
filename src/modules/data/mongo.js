@@ -31,6 +31,25 @@ var repository = {
                         });
                     });
                 });                
+	        },
+	        
+	        get: function(id, c) {
+	            var item_id = id;
+                var callback = c;
+                self.client.open(function(err, p_client) {
+                    utils.log("collection selected: " + collection_name);
+                    self.client.collection(collection_name, function (err, coll) {
+                        _bson_id = new self.client.bson_serializer.ObjectID(item_id);
+                        coll.findOne({ _id : _bson_id }, function(err, doc) {
+                            self.client.close();
+                            callback(err, doc);
+                        });
+                    });
+                });                
+	        },
+	        
+	        delete: function() {
+	            
 	        }
 	    };
         return coll;
