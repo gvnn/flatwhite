@@ -3,9 +3,8 @@ var data = require("./data");
 var crypto = require("crypto");
 
 /*
-This module manages 
+Admin manager module
 */
-
 var admin = {
 
     execute: function(method, req, res, next) {
