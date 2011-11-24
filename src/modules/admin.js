@@ -22,6 +22,8 @@ var admin = {
                 this.delete_admin(req, res);
                 break;
             case "put":
+                //update
+                this.update(req, res);
                 break;
         }
     },
@@ -32,8 +34,7 @@ var admin = {
     // - password: password in clear, will be stored in md5
     // - active: true/false
     add: function(req, res) {
-        utils.log("new admin method called");
-        
+        utils.log("new admin");
         var self = this;
         
         email = req.body.email != null ? req.body.email : "";
@@ -44,7 +45,7 @@ var admin = {
             utils.log("adding user: " + email);
             data.instance().collection("admin").add({ email: email, password: crypto.createHash('md5').update(password).digest("hex"), active: Boolean(active) }, function(err, obj) {
                 if(err) {
-                    utils.log("error in adding admin", true);
+                    utils.log("error adding admin", true);
                     utils.response_err(res, err);
                 } else {
                     utils.log("admin added successfully");
@@ -57,9 +58,7 @@ var admin = {
         }
     },
     
-    // function that retrieves an admin object
-    // parameters:
-    // - _id: admin's id
+    // function that retrieves a single admin or the list of all admin
     get: function(req, res) {
         admin_id = req.params.item != null ? req.params.item : "";
         if(admin_id != "") {
@@ -70,6 +69,7 @@ var admin = {
                     utils.response_err(res, err);
                 } else {
                     utils.log("admin returned successfully");
+                    delete obj["password"];
                     utils.response_obj(res, obj);
                 }
             });
@@ -87,6 +87,7 @@ var admin = {
         }
     },
     
+    // function that deletes an admin
     delete_admin: function(req, res) {
         utils.log("admin delete");
         admin_id = req.params.item != null ? req.params.item : "";
@@ -103,6 +104,32 @@ var admin = {
         } else {
             utils.log("invalid admin id", true);
             utils.response_err(res, "invalid admin id");
+        }
+    },
+
+    update: function(req, res) {
+        utils.log("update admin");
+        var self = this;
+        
+        admin_id = req.params.item != null ? req.params.item : "";
+        email = req.body.email != null ? req.body.email : "";
+        password = req.body.password != null ? req.body.password : "";
+        active = req.body.active != null ? req.body.active : "false";
+        
+        if(admin_id != "") {
+            utils.log("update user: " + admin_id);
+            data.instance().collection("admin").update(admin_id, { email: email, password: crypto.createHash('md5').update(password).digest("hex"), active: Boolean(active) }, function(err, obj) {
+                if(err) {
+                    utils.log("error updating admin", true);
+                    utils.response_err(res, err);
+                } else {
+                    utils.log("admin updated successfully");
+                    utils.response_msg(res, "updated admin " + admin_id);
+                }
+            });
+        } else {
+            utils.log("invalid id", true);
+            utils.response_err(res, "invalid id");
         }
     }
 };

@@ -21,7 +21,6 @@ var basicDatabase = {
         if ('Basic' != scheme) return next(400);
         
         if (basicDatabase.validate(credentials[0], credentials[1])) {
-            //TODO: save admin's id
             req.remoteUser = credentials[0];
             console.log("user authenticated: " + req.remoteUser);
             next();

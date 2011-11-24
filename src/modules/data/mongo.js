@@ -17,18 +17,23 @@ var repository = {
 	    
 	    //collection object
 	    var coll = {
+	        
 	        add: function(o, c) {
 	            var obj = o;
                 var callback = c;
                 self.client.open(function(err, p_client) {
                     utils.log("collection selected: " + collection_name);
                     self.client.collection(collection_name, function (err, coll) {
-                        coll.insert(obj, function(err, docs) {
-                            self.client.close();
-                            //the returned object is a collection
-                            //returns the first item
-                            callback(err, docs[0]);
-                        });
+                        try {
+                            coll.insert(obj, function(err, docs) {
+                                self.client.close();
+                                //the returned object is a collection
+                                //returns the first item
+                                callback(err, docs[0]);
+                            });
+                        } catch(err) {
+                            callback(err, null);
+                        }
                     });
                 });                
 	        },
@@ -39,11 +44,15 @@ var repository = {
                 self.client.open(function(err, p_client) {
                     utils.log("collection selected: " + collection_name);
                     self.client.collection(collection_name, function (err, coll) {
-                        _bson_id = new self.client.bson_serializer.ObjectID(item_id);
-                        coll.findOne({ _id : _bson_id }, function(err, doc) {
-                            self.client.close();
-                            callback(err, doc);
-                        });
+                        try {
+                            _bson_id = new self.client.bson_serializer.ObjectID(item_id);
+                            coll.findOne({ _id : _bson_id }, function(err, doc) {
+                                self.client.close();
+                                callback(err, doc);
+                            });
+                        } catch(err) {
+                            callback(err, null);
+                        }
                     });
                 });                
 	        },
@@ -54,14 +63,38 @@ var repository = {
                 self.client.open(function(err, p_client) {
                     utils.log("collection selected: " + collection_name);
                     self.client.collection(collection_name, function (err, coll) {
-                        _bson_id = new self.client.bson_serializer.ObjectID(item_id);
-                        coll.remove({ _id : _bson_id }, function(err, doc) {
-                            self.client.close();
-                            callback(err, doc);
-                        });
+                        try {
+                            _bson_id = new self.client.bson_serializer.ObjectID(item_id);
+                            coll.remove({ _id : _bson_id }, function(err, doc) {
+                                self.client.close();
+                                callback(err, doc);
+                            });
+                        } catch(err) {
+                            callback(err, null);
+                        }
                     });
                 });
 	        },
+	        
+	        update: function(id, o, c) {
+	            var obj = o;
+                var callback = c;
+                var item_id = id;
+                
+                self.client.open(function(err, p_client) {
+                    utils.log("collection selected: " + collection_name);
+                    self.client.collection(collection_name, function (err, coll) {
+                        try {
+                            _bson_id = new self.client.bson_serializer.ObjectID(item_id);
+                            coll.update({ _id: _bson_id }, obj, { safe:true }, function(err) {
+                                callback(err);
+                            });
+                        } catch(err) {
+                            callback(err, null);
+                        }
+                    });
+                });
+            },
 	        
 	        list: function(f, c) {
 	            var fields = f;
@@ -69,20 +102,24 @@ var repository = {
                 self.client.open(function(err, p_client) {
                     utils.log("collection selected: " + collection_name);
                     self.client.collection(collection_name, function (err, coll) {
+                        try {
+                            mongo_fields = {};
+                            for (var i=0; i < fields.length; i++) {
+                                mongo_fields[fields[i]] = 1;
+                            }
                         
-                        mongo_fields = {};
-                        for (var i=0; i < fields.length; i++) {
-                            mongo_fields[fields[i]] = 1;
+                            coll.find({}, mongo_fields ).toArray(function(err, docs) {
+                                self.client.close();
+                                callback(err, docs);
+                            });
+                        } catch(err) {
+                            callback(err, null);
                         }
-                        
-                        coll.find({}, mongo_fields ).toArray(function(err, docs) {
-                            self.client.close();
-                            callback(err, docs);
-                        });
                     });
                 });
 	        }
 	    };
+	    
         return coll;
 	}
 }
