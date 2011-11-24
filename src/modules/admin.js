@@ -14,7 +14,14 @@ var admin = {
                 this.add(req, res);
                 break;
             case "get":
+                //get admin details
                 this.get(req, res);
+                break;
+            case "delete":
+                //delete admin
+                this.delete_admin(req, res);
+                break;
+            case "put":
                 break;
         }
     },
@@ -54,12 +61,12 @@ var admin = {
     // parameters:
     // - _id: admin's id
     get: function(req, res) {
-        utils.log("admin get");
         admin_id = req.params.item != null ? req.params.item : "";
         if(admin_id != "") {
+            utils.log("admin get");
             data.instance().collection("admin").get(admin_id, function(err, obj) {
                 if(err) {
-                    utils.log("error in gettin admin", true);
+                    utils.log("error in retrieve admin", true);
                     utils.response_err(res, err);
                 } else {
                     utils.log("admin returned successfully");
@@ -67,8 +74,35 @@ var admin = {
                 }
             });
         } else {
-            utils.log("fields missing", true);
-            utils.response_err(res, "fields missing");
+            utils.log("admin list");
+            //returns a list of all admins
+            data.instance().collection("admin").list(["email", "active"], function(err, objs) {
+                if(err) {
+                    utils.log("error in retrieve list", true);
+                    utils.response_err(res, err);
+                } else {
+                    utils.response_obj(res, objs);
+                }
+            });
+        }
+    },
+    
+    delete_admin: function(req, res) {
+        utils.log("admin delete");
+        admin_id = req.params.item != null ? req.params.item : "";
+        if(admin_id != "") {
+            data.instance().collection("admin").remove(admin_id, function(err, obj) {
+                if(err) {
+                    utils.log("error in delete admin", true);
+                    utils.response_err(res, err);
+                } else {
+                    utils.log("admin deleted successfully");
+                    utils.response_msg(res, "deleted admin " + admin_id);
+                }
+            });
+        } else {
+            utils.log("invalid admin id", true);
+            utils.response_err(res, "invalid admin id");
         }
     }
 };

@@ -4,6 +4,10 @@ exports.bad_request = function(res, message) {
     res.end(JSON.stringify({ error: message }));
 };
 
+exports.response_msg = function(res, msg) {
+    this.response_obj(res, { msg : msg });
+};
+
 exports.response_obj = function(res, obj) {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
