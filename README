@@ -19,13 +19,15 @@ Database
 
   DB Whish list:
 
-    CouchDB
+    MySQL?
+    PostgreSQL?
+    CouchDB?
     Redis?
 
 The idea
 -------------
 
-Flatwhite is a very simple CMS API... That's it!
+Flatwhite is a very simple CMS, without any GUI, only REST APIs... That's it!
 
   Version 1
   Provide basic authentication and basic CMS. A content item has only Title,
@@ -34,7 +36,7 @@ Flatwhite is a very simple CMS API... That's it!
 
   Version 2
   Optional custom fields for content items, related content and more than one
-  picture per item.
+  picture per item. More Databases.
 
   Version x
   Is it really necessary?
@@ -42,27 +44,28 @@ Flatwhite is a very simple CMS API... That's it!
 Build modules
 -------------
 
-Flatwhite allows you to write the modules that you like, it's all in the 
+Flatwhite allows you to write all the modules that you like, it's all in the 
 routing:
 
 /:version([0-9]+)/:module([a-z]+)/:item([a-z0-9]+)?/:operation([a-z]+)?
 
 The main function checks which module has to be called and loads the module's
-file in the modules folder, for example posting a request to "/1/admin" will
-load the admin.js module. Modules must implement the "execute" method, called
-by the main process.
+file, for example posting a request to "/1/admin" will load the admin.js module. 
+Modules must implement the "execute" method, called by the main process.
 
 Database modules
 -------------
 
-Flatwhite implements a very simple data abstraction layer. Similar to modules
+Flatwhite implements a very simple data abstraction layer. Similar to modules,
 the "driver" has to be saved in the modules/data folder and has to implement:
 
   "setup": method called at load
   "collection": object that expose the operations available on the collection
-  (add, delete, update, search)
+  (add, get, remove, update, list, find, etc...)
   
 Debug
 -------------
+Flatwhite uses by default the 8080 port, if you want to use node-inspector this
+is a working comman line:
 
-node-inspector --web-port=8081  & node --debug flatwhite.js
+$ node-inspector --web-port=8081  & node --debug flatwhite.js
