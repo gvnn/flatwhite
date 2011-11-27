@@ -5,9 +5,11 @@ var crypto = require("crypto");
 /*
 Admin manager module
 */
-var admin = {
-
-    execute: function(method, req, res, next) {
+var admin = (function () {
+    
+    var module = {};
+    
+    module.execute = function (method, req, res, next) {
         switch(method) {
             case "post":
                 //new admin
@@ -26,14 +28,14 @@ var admin = {
                 this.update(req, res);
                 break;
         }
-    },
-
+    };
+    
     // function that adds a new admin.
     // parameters:
     // - email: used also as username
     // - password: password in clear, will be stored in md5
     // - active: true/false
-    add: function(req, res) {
+    module.add = function(req, res) {
         utils.log("new admin");
         var self = this;
         
@@ -56,10 +58,10 @@ var admin = {
             utils.log("fields missing", true);
             utils.response_err(res, "fields missing");
         }
-    },
+    };
     
     // function that retrieves a single admin or the list of all admin
-    get: function(req, res) {
+    module.get = function(req, res) {
         admin_id = req.params.item != null ? req.params.item : "";
         if(admin_id != "") {
             utils.log("admin get");
@@ -85,10 +87,10 @@ var admin = {
                 }
             });
         }
-    },
+    };
     
     // function that deletes an admin
-    delete_admin: function(req, res) {
+    module.delete_admin = function(req, res) {
         utils.log("admin delete");
         admin_id = req.params.item != null ? req.params.item : "";
         if(admin_id != "") {
@@ -105,9 +107,9 @@ var admin = {
             utils.log("invalid admin id", true);
             utils.response_err(res, "invalid admin id");
         }
-    },
-
-    update: function(req, res) {
+    };
+    
+    module.update = function(req, res) {
         utils.log("update admin");
         var self = this;
         
@@ -131,7 +133,10 @@ var admin = {
             utils.log("invalid id", true);
             utils.response_err(res, "invalid id");
         }
-    }
-};
+    };
+
+    return module;
+    
+}());
 
 module.exports = admin;
