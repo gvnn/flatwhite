@@ -1,10 +1,23 @@
+var utils = require("../utils");
 var config = require('../config');
 
-exports.instance = function() {
-    this.repository_config = config.data.repositories[config.data.selected_repository];
-    repo = require("./data/" + this.repository_config.name);
-    repo.setup();
-    return repo;
-};
 
-module.exports = exports;
+var data = (function () {
+
+    var module = {};
+    
+    module.instance = function() {
+        if(!module.config) {
+            module.config = config.data.repositories[config.data.selected_repository];
+            utils.log('selected data module: ' + module.config.name);
+        }
+        repo = require("./data/" + module.config.name);
+        repo.setup(); //will be deleted
+        return repo;
+    };
+    
+    return module;
+    
+}());
+
+module.exports = data;
