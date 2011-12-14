@@ -6,20 +6,20 @@ var utils = require("../../utils");
 var repository = {
     
     setup: function() {
-	    this.db_conf = config.data.repositories[config.data.selected_repository];
+        this.db_conf = config.data.repositories[config.data.selected_repository];
         this.client = new Db(this.db_conf.db, new Server(this.db_conf.server, this.db_conf.port, {}));
-	},
-	
-	collection: function(name) {
-	    
-	    var self = this;
-	    var collection_name = config.data.collections_prefix + name;
-	    
-	    //collection object
-	    var coll = {
-	        
-	        add: function(o, c) {
-	            var obj = o;
+    },
+    
+    collection: function(name) {
+        
+        var self = this;
+        var collection_name = config.data.collections_prefix + name;
+        
+        //collection object
+        var coll = {
+            
+            add: function(o, c) {
+                var obj = o;
                 var callback = c;
                 self.client.open(function(err, p_client) {
                     utils.log("collection selected: " + collection_name);
@@ -35,11 +35,11 @@ var repository = {
                             callback(err, null);
                         }
                     });
-                });                
-	        },
-	        
-	        get: function(id, c) {
-	            var item_id = id;
+                });
+            },
+            
+            get: function(id, c) {
+                var item_id = id;
                 var callback = c;
                 self.client.open(function(err, p_client) {
                     utils.log("collection selected: " + collection_name);
@@ -54,11 +54,11 @@ var repository = {
                             callback(err, null);
                         }
                     });
-                });                
-	        },
-	        
-	        remove: function(id, c) {
-	            var item_id = id;
+                });
+            },
+            
+            remove: function(id, c) {
+                var item_id = id;
                 var callback = c;
                 self.client.open(function(err, p_client) {
                     utils.log("collection selected: " + collection_name);
@@ -74,10 +74,10 @@ var repository = {
                         }
                     });
                 });
-	        },
-	        
-	        update: function(id, o, c) {
-	            var obj = o;
+            },
+            
+            update: function(id, o, c) {
+                var obj = o;
                 var callback = c;
                 var item_id = id;
                 
@@ -95,9 +95,9 @@ var repository = {
                     });
                 });
             },
-	        
-	        list: function(f, c) {
-	            var fields = f;
+            
+            list: function(f, c) {
+                var fields = f;
                 var callback = c;
                 self.client.open(function(err, p_client) {
                     utils.log("collection selected: " + collection_name);
@@ -107,7 +107,7 @@ var repository = {
                             for (var i=0; i < fields.length; i++) {
                                 mongo_fields[fields[i]] = 1;
                             }
-                        
+                            
                             coll.find({}, mongo_fields ).toArray(function(err, docs) {
                                 self.client.close();
                                 callback(err, docs);
@@ -117,11 +117,11 @@ var repository = {
                         }
                     });
                 });
-	        }
-	    };
-	    
+            }
+        };
+        
         return coll;
-	}
+    }
 }
 
 module.exports = repository;
