@@ -1,8 +1,8 @@
+var request = require("./request");
 var config = require("../src/config");
 var querystring = require("querystring");
 var http = require("http");
 var unit_test, client;
-
 var admin_num = 0;
 
 var start_test = function(test) {
@@ -115,24 +115,11 @@ var get_admin = function(test, obj) {
 
 var get_list = function(c) {
     callback = c;
-    
-    var get_options = {
-        host: '127.0.0.1',
-        port: config.server.port,
-        path: '/1/admin/',
-        method: 'GET'
-    };
-    
-    var get_req = http.request(get_options, function(res) {
-        res.setEncoding('utf8');
-        res.on('data', function (chunk) {
-            response = JSON.parse(chunk);
-            callback(response.length);
-        });
+    request.get('admin/', function(res, chunk) {
+        response = JSON.parse(chunk);
+        callback(response.length);
     });
-    
-    get_req.end();
-}
+};
 
 var delete_admin = function(test, obj) {
     
