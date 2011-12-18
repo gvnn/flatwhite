@@ -1,7 +1,9 @@
 exports.badRequest = function(res, message) {
-    res.statusCode = 400;
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ error: message }));
+    if (res) {
+        res.statusCode = 400;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ error: message }));
+    }
 };
 
 exports.response = function(res, msg) {
@@ -9,9 +11,11 @@ exports.response = function(res, msg) {
 };
 
 exports.responseObject = function(res, obj) {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(obj));
+    if(res) {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(obj));
+    }
 };
 
 exports.log = function(message, error) {
@@ -25,9 +29,11 @@ exports.log = function(message, error) {
 };
 
 exports.responseError = function(res, msg) {
-    res.statusCode = 500;
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ err: msg }));
+    if(res) {
+        res.statusCode = 500;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ err: msg }));
+    }
 };
 
 module.exports = exports;
