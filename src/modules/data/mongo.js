@@ -29,7 +29,7 @@ var mongo = (function () {
         var collectionObject = {
             
             /**
-             * Returns to a callback function the selected collection mongob object
+             * Returns to a callback function the selected collection object
              *
              * @param c callback function
              */
@@ -43,6 +43,12 @@ var mongo = (function () {
                 });
             },
             
+            /**
+             * Adds a new item to a collection
+             *
+             * @param o Object to add
+             * @param c Callback function
+             */
             add: function(o, c) {
                 var obj = o;
                 var callback = c;
@@ -58,6 +64,12 @@ var mongo = (function () {
                 });
             },
             
+            /**
+             * Returns to a callback function the selected object
+             *
+             * @param id Object Id
+             * @param c Callback function
+             */
             get: function(id, c) {
                 var itemId = id;
                 var callback = c;
@@ -74,6 +86,12 @@ var mongo = (function () {
                 });
             },
             
+            /**
+             * Removes an object from the collection
+             *
+             * @param id Object Id
+             * @param c Callback function
+             */
             remove: function(id, c) {
                 var itemId = id;
                 var callback = c;
@@ -90,6 +108,13 @@ var mongo = (function () {
                 });
             },
             
+            /**
+             * Updates an object in the collection
+             *
+             * @param id Object Id
+             * @param o New object
+             * @param c Callback function
+             */
             update: function(id, o, c) {
                 var obj = o;
                 var callback = c;
@@ -107,6 +132,12 @@ var mongo = (function () {
                 });
             },
             
+            /**
+             * Returns a list of object
+             *
+             * @param f Fields in where clause
+             * @param c Callback function
+             */
             list: function(f, c) {
                 var fields = f;
                 var callback = c;
