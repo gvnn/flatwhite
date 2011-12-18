@@ -3,13 +3,13 @@ var config = {
         port: 8080
     },
     errors: {
-        show_stack: true,
-        dump_exceptions: true
+        showStack: true,
+        dumpExceptions: true
     },
     //auth: 'basicDatabase',
     data: {
-        collections_prefix: "fw_",
-        selected_repository: 0,
+        collectionsPrefix: "fw_",
+        selectedRepository: 0,
         repositories: [
             {
                 name: "mongo",

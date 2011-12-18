@@ -21,7 +21,7 @@ var admin = (function () {
                 break;
             case "delete":
                 //delete admin
-                this.delete_admin(req, res);
+                this.deleteAdmin(req, res);
                 break;
             case "put":
                 //update
@@ -48,31 +48,31 @@ var admin = (function () {
             data.instance().collection("admin").add({ email: email, password: crypto.createHash('md5').update(password).digest("hex"), active: Boolean(active) }, function(err, obj) {
                 if(err) {
                     utils.log("error adding admin", true);
-                    utils.response_err(res, err);
+                    utils.responseError(res, err);
                 } else {
                     utils.log("admin added successfully");
-                    utils.response_obj(res, obj);
+                    utils.responseObject(res, obj);
                 }
             });
         } else {
             utils.log("fields missing", true);
-            utils.response_err(res, "fields missing");
+            utils.responseError(res, "fields missing");
         }
     };
     
     // function that retrieves a single admin or the list of all admin
     module.get = function(req, res) {
-        admin_id = req.params.item != null ? req.params.item : "";
-        if(admin_id != "") {
+        adminId = req.params.item != null ? req.params.item : "";
+        if(adminId != "") {
             utils.log("admin get");
-            data.instance().collection("admin").get(admin_id, function(err, obj) {
+            data.instance().collection("admin").get(adminId, function(err, obj) {
                 if(err) {
                     utils.log("error in retrieve admin", true);
-                    utils.response_err(res, err);
+                    utils.responseError(res, err);
                 } else {
                     utils.log("admin returned successfully");
                     delete obj["password"];
-                    utils.response_obj(res, obj);
+                    utils.responseObject(res, obj);
                 }
             });
         } else {
@@ -81,31 +81,31 @@ var admin = (function () {
             data.instance().collection("admin").list(["email", "active"], function(err, objs) {
                 if(err) {
                     utils.log("error in retrieve list", true);
-                    utils.response_err(res, err);
+                    utils.responseError(res, err);
                 } else {
-                    utils.response_obj(res, objs);
+                    utils.responseObject(res, objs);
                 }
             });
         }
     };
     
     // function that deletes an admin
-    module.delete_admin = function(req, res) {
+    module.deleteAdmin = function(req, res) {
         utils.log("admin delete");
-        admin_id = req.params.item != null ? req.params.item : "";
-        if(admin_id != "") {
-            data.instance().collection("admin").remove(admin_id, function(err, obj) {
+        adminId = req.params.item != null ? req.params.item : "";
+        if(adminId != "") {
+            data.instance().collection("admin").remove(adminId, function(err, obj) {
                 if(err) {
                     utils.log("error in delete admin", true);
-                    utils.response_err(res, err);
+                    utils.responseError(res, err);
                 } else {
                     utils.log("admin deleted successfully");
-                    utils.response_msg(res, "deleted admin " + admin_id);
+                    utils.response(res, "deleted admin " + adminId);
                 }
             });
         } else {
             utils.log("invalid admin id", true);
-            utils.response_err(res, "invalid admin id");
+            utils.responseError(res, "invalid admin id");
         }
     };
     
@@ -113,25 +113,25 @@ var admin = (function () {
         utils.log("update admin");
         var self = this;
         
-        admin_id = req.params.item != null ? req.params.item : "";
+        adminId = req.params.item != null ? req.params.item : "";
         email = req.body.email != null ? req.body.email : "";
         password = req.body.password != null ? req.body.password : "";
         active = req.body.active != null ? req.body.active : "false";
         
-        if(admin_id != "") {
-            utils.log("update user: " + admin_id);
-            data.instance().collection("admin").update(admin_id, { email: email, password: crypto.createHash('md5').update(password).digest("hex"), active: Boolean(active) }, function(err, obj) {
+        if(adminId != "") {
+            utils.log("update user: " + adminId);
+            data.instance().collection("admin").update(adminId, { email: email, password: crypto.createHash('md5').update(password).digest("hex"), active: Boolean(active) }, function(err, obj) {
                 if(err) {
                     utils.log("error updating admin", true);
-                    utils.response_err(res, err);
+                    utils.responseError(res, err);
                 } else {
                     utils.log("admin updated successfully");
-                    utils.response_msg(res, "updated admin " + admin_id);
+                    utils.response(res, "updated admin " + adminId);
                 }
             });
         } else {
             utils.log("invalid id", true);
-            utils.response_err(res, "invalid id");
+            utils.responseError(res, "invalid id");
         }
     };
 

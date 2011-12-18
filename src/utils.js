@@ -1,14 +1,14 @@
-exports.bad_request = function(res, message) {
+exports.badRequest = function(res, message) {
     res.statusCode = 400;
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({ error: message }));
 };
 
-exports.response_msg = function(res, msg) {
-    this.response_obj(res, { msg : msg });
+exports.response = function(res, msg) {
+    this.responseObject(res, { msg : msg });
 };
 
-exports.response_obj = function(res, obj) {
+exports.responseObject = function(res, obj) {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(obj));
@@ -24,7 +24,7 @@ exports.log = function(message, error) {
     }
 };
 
-exports.response_err = function(res, msg) {
+exports.responseError = function(res, msg) {
     res.statusCode = 500;
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({ err: msg }));

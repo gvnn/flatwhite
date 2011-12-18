@@ -48,7 +48,7 @@ server.use('/',
 );
 
 //Uncaught Exceptions
-server.use(connect.errorHandler({ showStack: config.errors.show_stack, dumpExceptions: config.errors.dump_exceptions }));
+server.use(connect.errorHandler({ showStack: config.errors.showStack, dumpExceptions: config.errors.dumpExceptions }));
 
 //start server
 server.listen(config.server.port);
