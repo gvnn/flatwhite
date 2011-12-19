@@ -135,10 +135,11 @@ var mongo = (function () {
             /**
              * Returns a list of object
              *
-             * @param f Fields in where clause
+             * @param f Fields to return
              * @param c Callback function
              */
-            list: function(f, c) {
+            list: function(w, f, c) {
+                var where = w;
                 var fields = f;
                 var callback = c;
                 this.getCollection(function(err, coll) {
@@ -147,7 +148,7 @@ var mongo = (function () {
                         for (var i=0; i < fields.length; i++) {
                             mongoFields[fields[i]] = 1;
                         }
-                        coll.find({}, mongoFields).toArray(function(err, docs) {
+                        coll.find(where, mongoFields).toArray(function(err, docs) {
                             module.client.close();
                             callback(err, docs);
                         });

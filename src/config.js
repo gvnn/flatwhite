@@ -19,6 +19,9 @@ var config = {
                 port: 27017
             } //,...
         ]
+    },
+    logs: {
+        enabled: true
     }
 };
 

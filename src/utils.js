@@ -1,3 +1,5 @@
+var config = require('./config');
+
 exports.badRequest = function(res, message) {
     if (res) {
         res.statusCode = 400;
@@ -19,12 +21,14 @@ exports.responseObject = function(res, obj) {
 };
 
 exports.log = function(message, error) {
-    if(error) {
-        console.log("\033[90m" + (new Date().toUTCString())
-                + " \033[91m" + message + "\033[0m");
-    } else {
-        console.log("\033[90m" + (new Date().toUTCString())
-                + " \033[97m" + message + "\033[0m");
+    if(config.logs.enabled) {
+        if(error) {
+            console.log("\033[90m" + (new Date().toUTCString())
+                    + " \033[91m" + message + "\033[0m");
+        } else {
+            console.log("\033[90m" + (new Date().toUTCString())
+                    + " \033[97m" + message + "\033[0m");
+        }
     }
 };
 

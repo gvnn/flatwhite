@@ -3,11 +3,16 @@
  *
  */
 var connect = require('connect'),
+    data = require("../data"),
+    utils = require("../../utils"),
+    crypto = require("crypto"),
     unauthorized = connect.utils.unauthorized;
 
-var basicDatabase = {
+var basicDatabase = (function () {
 
-    authenticate: function(req, res, next) {
+    var module = {};
+    
+    module.authenticate = function(req, res, next) {
         
         var realm = 'Authorization Required';
         var authorization = req.headers.authorization;
@@ -20,19 +25,29 @@ var basicDatabase = {
 
         if ('Basic' != scheme) return next(400);
         
-        if (basicDatabase.validate(credentials[0], credentials[1])) {
-            req.remoteUser = credentials[0];
-            console.log("user authenticated: " + req.remoteUser);
-            next();
-        } else {
-            unauthorized(res, realm);
-        }
-    },
+        module.validate(credentials[0], credentials[1], function(result){
+            if (result) {
+                req.remoteUser = credentials[0];
+                console.log("user authenticated: " + req.remoteUser);
+                next();
+            } else {
+                unauthorized(res, realm);
+            }
+        });
+    };
     
-    validate: function(username, password) {
-        //TODO: attach to database
-        return (username == "username" && password == "password");
-    }
-};
+    module.validate = function(username, password, c) {
+        var callback = c;
+        data.instance().collection("admin").list({ 
+            email: username, 
+            password: crypto.createHash('md5').update(password).digest("hex") }, [], 
+        function(err, objs) {
+             c(objs.length > 0);
+        });
+    };
+    
+    return module;
+
+}());
 
 module.exports = basicDatabase;

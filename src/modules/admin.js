@@ -13,59 +13,50 @@ var admin = (function () {
         switch(method) {
             case "post":
                 //new admin
-                this.add(req, res);
+                executePost(req, res);
                 break;
             case "get":
                 //get admin details
-                this.get(req, res);
+                executeGet(req, res);
                 break;
             case "delete":
                 //delete admin
-                this.deleteAdmin(req, res);
+                executeDelete(req, res);
                 break;
             case "put":
                 //update
-                this.update(req, res);
+                executePut(req, res);
                 break;
         }
     };
     
-    // function that adds a new admin.
-    // parameters:
-    // - email: used also as username
-    // - password: password in clear, will be stored in md5
-    // - active: true/false
-    module.add = function(req, res) {
+    executePost = function(req, res) {
         utils.log("new admin");
-        var self = this;
-        
         email = req.body.email != null ? req.body.email : "";
         password = req.body.password != null ? req.body.password : "";
         active = req.body.active != null ? req.body.active : "false";
         
-        if(email != "" && password != "") {
-            utils.log("adding user: " + email);
-            data.instance().collection("admin").add({ email: email, password: crypto.createHash('md5').update(password).digest("hex"), active: Boolean(active) }, function(err, obj) {
-                if(err) {
-                    utils.log("error adding admin", true);
-                    utils.responseError(res, err);
-                } else {
-                    utils.log("admin added successfully");
-                    utils.responseObject(res, obj);
-                }
-            });
-        } else {
-            utils.log("fields missing", true);
-            utils.responseError(res, "fields missing");
-        }
+        utils.log("adding user: " + admin.email);
+        module.addAdmin({
+            email: email, 
+            password: password, 
+            active: active
+        }, function(err, obj) {
+            if(err) {
+                utils.log("error adding admin", true);
+                utils.responseError(res, err);
+            } else {
+                utils.log("admin added successfully");
+                utils.responseObject(res, obj);
+            }
+        });
     };
     
-    // function that retrieves a single admin or the list of all admin
-    module.get = function(req, res) {
+    executeGet = function(req, res) {
         adminId = req.params.item != null ? req.params.item : "";
         if(adminId != "") {
             utils.log("admin get");
-            data.instance().collection("admin").get(adminId, function(err, obj) {
+            module.getAdmin(adminId, function(err, obj) {
                 if(err) {
                     utils.log("error in retrieve admin", true);
                     utils.responseError(res, err);
@@ -78,7 +69,7 @@ var admin = (function () {
         } else {
             utils.log("admin list");
             //returns a list of all admins
-            data.instance().collection("admin").list(["email", "active"], function(err, objs) {
+            module.getAdmins({}, ["email", "active"], function(err, objs) {
                 if(err) {
                     utils.log("error in retrieve list", true);
                     utils.responseError(res, err);
@@ -89,12 +80,11 @@ var admin = (function () {
         }
     };
     
-    // function that deletes an admin
-    module.deleteAdmin = function(req, res) {
+    executeDelete = function(req, res) {
         utils.log("admin delete");
         adminId = req.params.item != null ? req.params.item : "";
         if(adminId != "") {
-            data.instance().collection("admin").remove(adminId, function(err, obj) {
+            module.deleteAdmin(adminId, function(err, obj) {
                 if(err) {
                     utils.log("error in delete admin", true);
                     utils.responseError(res, err);
@@ -109,7 +99,7 @@ var admin = (function () {
         }
     };
     
-    module.update = function(req, res) {
+    executePut = function(req, res) {
         utils.log("update admin");
         var self = this;
         
@@ -132,6 +122,49 @@ var admin = (function () {
         } else {
             utils.log("invalid id", true);
             utils.responseError(res, "invalid id");
+        }
+    };
+
+    module.deleteAdmin = function(id, callback) {
+        data.instance().collection("admin").remove(id, callback);
+    };
+
+    /**
+     * Admin details
+     *
+     * @param id admin Id
+     * @param callback Callback function
+     */
+    module.getAdmin = function(id, callback) {
+        data.instance().collection("admin").get(id, callback);
+    };
+    
+    /**
+     * Admins list
+     *
+     * @param where lists's filters
+     * @param fields fields to display on list
+     * @param callback Callback function
+     */
+    module.getAdmins = function(where, fields, callback) {
+        data.instance().collection("admin").list(where, fields, callback);
+    };
+    
+    /**
+     * Adds a new admin.
+     *
+     * @param admin admin object
+     * @param callback Callback function
+     */
+    module.addAdmin = function(admin, callback) {
+        if(admin.email != "" && admin.password != "") {
+            data.instance().collection("admin").add({ 
+                    email: admin.email, 
+                    password: crypto.createHash('md5').update(admin.password).digest("hex"), 
+                    active: Boolean(admin.active) 
+                }, callback);
+        } else {
+            callback("fields missing", null);
         }
     };
 

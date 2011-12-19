@@ -1,4 +1,4 @@
-var config = require("../src/config");
+var config = require("../../src/config");
 var http = require("http");
 
 var request = (function () {
