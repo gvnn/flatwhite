@@ -10,23 +10,28 @@ var admin = (function () {
     var module = {};
     
     module.execute = function (method, req, res, next) {
-        switch(method) {
-            case "post":
-                //new admin
-                executePost(req, res);
-                break;
-            case "get":
-                //get admin details
-                executeGet(req, res);
-                break;
-            case "delete":
-                //delete admin
-                executeDelete(req, res);
-                break;
-            case "put":
-                //update
-                executePut(req, res);
-                break;
+        try {
+            switch(method) {
+                case "post":
+                    //new admin
+                    executePost(req, res);
+                    break;
+                case "get":
+                    //get admin details
+                    executeGet(req, res);
+                    break;
+                case "delete":
+                    //delete admin
+                    executeDelete(req, res);
+                    break;
+                case "put":
+                    //update
+                    executePut(req, res);
+                    break;
+            }
+        } catch(err) {
+            utils.log(err, true);
+            utils.responseError(res, err);
         }
     };
     
@@ -110,21 +115,52 @@ var admin = (function () {
         
         if(adminId != "") {
             utils.log("update user: " + adminId);
-            data.instance().collection("admin").update(adminId, { email: email, password: crypto.createHash('md5').update(password).digest("hex"), active: Boolean(active) }, function(err, obj) {
-                if(err) {
-                    utils.log("error updating admin", true);
-                    utils.responseError(res, err);
-                } else {
-                    utils.log("admin updated successfully");
-                    utils.response(res, "updated admin " + adminId);
-                }
-            });
+            module.updateAdmin(adminId, {
+                    email: email, 
+                    password: password, 
+                    active: active
+                }, function(err, obj) {
+                    if(err) {
+                        utils.log("error updating admin", true);
+                        utils.responseError(res, err);
+                    } else {
+                        utils.log("admin updated successfully");
+                        utils.response(res, "updated admin " + adminId);
+                    }
+                });
         } else {
             utils.log("invalid id", true);
             utils.responseError(res, "invalid id");
         }
     };
+    
+    
+     /**
+     * Updates an admin
+     *
+     * @param id admin Id
+     * @param admin admin object
+     * @param callback Callback function
+     */
+    module.updateAdmin = function(id, admin, callback) {
+        if(admin.email != "" && admin.password != "") {
+            data.instance().collection("admin").update(id, { 
+                    email: admin.email, 
+                    password: crypto.createHash('md5').update(admin.password).digest("hex"), 
+                    active: Boolean(admin.active) 
+                }, callback);
+        } else {
+            throw "error updating admin, fields missing";
+        }
+    };
 
+
+    /**
+     * Deletes an admin
+     *
+     * @param id admin Id
+     * @param callback Callback function
+     */
     module.deleteAdmin = function(id, callback) {
         data.instance().collection("admin").remove(id, callback);
     };
@@ -164,7 +200,7 @@ var admin = (function () {
                     active: Boolean(admin.active) 
                 }, callback);
         } else {
-            callback("fields missing", null);
+            throw "error adding admin, fields missing";
         }
     };
 
