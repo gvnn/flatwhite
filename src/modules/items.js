@@ -59,13 +59,69 @@ var items = (function () {
     };
     
     module.addItem = function(item, callback) {
-        data.instance().collection("items").add({ 
+        //if code is not empty check if another one exists
+        if(item.code) {
+            module.getItemByCode(item.code, function(err, obj) {
+                if(obj.length > 0) {
+                    throw "error adding item, code already exists. choose a different code or live it empty";
+                } else {
+                    data.instance().collection("items").add({ 
+                            title: item.title,
+                            summary: item.summary,
+                            text: item.text,
+                            code: item.code,
+                            active: Boolean(item.active) 
+                        }, callback);
+                }
+            });
+        } else {
+            data.instance().collection("items").add({ 
+                    title: item.title,
+                    summary: item.summary,
+                    text: item.text,
+                    code: item.code,
+                    active: Boolean(item.active) 
+                }, callback);
+        }
+    };
+    
+    module.getItemByCode = function(code, callback) {
+        data.instance().collection("items").list({code: code}, [], callback);
+    };
+    
+    module.getItem = function(id, callback) {
+        data.instance().collection("items").get(id, callback);
+    };
+    
+    module.deleteItem = function(id, callback) {
+        data.instance().collection("items").remove(id, callback);
+    };
+    
+    module.updateItem = function(id, item, callback) {
+        //if code is not empty check if another one exists
+        if(item.code) {
+            module.getItemByCode(item.code, function(err, obj) {
+                if(obj.length > 0) {
+                    throw "error updating item, code already exists. choose a different code or live it empty";
+                } else {
+                    data.instance().collection("admin").update(id, { 
+                        title: item.title,
+                        summary: item.summary,
+                        text: item.text,
+                        code: item.code,
+                        active: Boolean(item.active)
+                    }, callback);
+                }
+            });
+        } else {
+            data.instance().collection("admin").update(id, { 
                 title: item.title,
                 summary: item.summary,
                 text: item.text,
                 code: item.code,
-                active: Boolean(item.active) 
+                active: Boolean(item.active)
             }, callback);
+        }
     };
     
     return module;
