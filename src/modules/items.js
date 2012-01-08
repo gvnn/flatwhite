@@ -30,6 +30,23 @@ var items = (function () {
         //check if the action is related to a child item
         if(req.params.child) {
             //execute child module
+            switch(req.params.child) {
+                case "tags":
+                    //add tag
+                    tags.addTag(req.params.item, req.body.tag.split(","), function(err, obj) {
+                        if(err) {
+                            utils.log("error adding tag", true);
+                            utils.responseError(res, err);
+                        } else {
+                            utils.log("tag added successfully");
+                            utils.responseObject(res, obj);
+                        }
+                    });
+                    break;
+                case "images":
+                    images.addImage(req.params.item, req, res);
+                    break;
+            }
         } else {
             utils.log("new content item");
             
@@ -45,7 +62,10 @@ var items = (function () {
                 title: title, 
                 summary: summary, 
                 text: text, 
-                code: code
+                code: code,
+                active: active,
+                tags: [],
+                images: []
             }, function(err, obj) {
                 if(err) {
                     utils.log("error adding content item", true);
@@ -63,14 +83,16 @@ var items = (function () {
         if(item.code) {
             module.getItemByCode(item.code, function(err, obj) {
                 if(obj.length > 0) {
-                    throw "error adding item, code already exists. choose a different code or live it empty";
+                    callback("error updating item, code already exists. choose a different code or live it empty", null);
                 } else {
                     data.instance().collection("items").add({ 
                             title: item.title,
                             summary: item.summary,
                             text: item.text,
                             code: item.code,
-                            active: Boolean(item.active) 
+                            active: Boolean(item.active),
+                            tags: item.tags,
+                            images: item.images
                         }, callback);
                 }
             });
@@ -80,7 +102,9 @@ var items = (function () {
                     summary: item.summary,
                     text: item.text,
                     code: item.code,
-                    active: Boolean(item.active) 
+                    active: Boolean(item.active),
+                    tags: item.tags,
+                    images: item.images
                 }, callback);
         }
     };
@@ -102,7 +126,7 @@ var items = (function () {
         if(item.code) {
             module.getItemByCode(item.code, function(err, obj) {
                 if(obj.length > 0) {
-                    throw "error updating item, code already exists. choose a different code or live it empty";
+                    callback("error updating item, code already exists. choose a different code or live it empty", null);
                 } else {
                     data.instance().collection("admin").update(id, { 
                         title: item.title,

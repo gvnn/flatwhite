@@ -200,7 +200,7 @@ var admin = (function () {
                     active: Boolean(admin.active) 
                 }, callback);
         } else {
-            throw "error adding admin, fields missing";
+            callback("error adding admin, fields missing", null);
         }
     };
 

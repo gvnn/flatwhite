@@ -64,6 +64,23 @@ var mongo = (function () {
                 });
             },
             
+            push: function(id, obj, c) {
+                var itemId = id;
+                var callback = c;
+                var objectToAdd = obj;
+                
+                this.getCollection(function(err, coll) {
+                    try {
+                        bsonId = new module.client.bson_serializer.ObjectID(itemId);
+                        coll.update({ _id: bsonId }, {"$pushAll": objectToAdd }, { safe:true }, function(err) {
+                            callback(err);
+                        });
+                    } catch(err) {
+                        callback(err, null);
+                    }
+                });
+            },
+            
             /**
              * Returns to a callback function the selected object
              *
