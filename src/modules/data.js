@@ -6,6 +6,8 @@ var data = (function () {
 
     var module = {};
     
+    module.version = 1;
+    
     module.instance = function() {
         if(!module.config) {
             module.config = config.data.repositories[config.data.selectedRepository];

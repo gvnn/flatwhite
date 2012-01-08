@@ -6,7 +6,7 @@ var loader = function(method, req, res, next) {
     utils.log(method + " - version: " + req.params.version + 
         ", module: " + req.params.module + 
         ", item: " + req.params.item + 
-        ", operation: " + req.params.operation);
+        ", child: " + req.params.child);
     _module = require("./modules/" + req.params.module);
     _module.execute(method, req, res, next);
 };
@@ -27,7 +27,7 @@ server.use(connect.bodyParser());
 //set routes
 server.use('/',
     connect.router(function(app) {
-        _path = "/:version([0-9]+)/:module([a-z]+)/:item([a-z0-9]+)?/:operation([a-z]+)?";
+        _path = "/:version([0-9]+)/:module([a-z]+)/:item([a-z0-9]+)?/:child([a-z]+)?";
         //Post -> Create
         app.post(_path, function(req, res, next) {
             loader("post", req, res, next);

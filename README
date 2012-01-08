@@ -47,7 +47,7 @@ Build modules
 Flatwhite allows you to write all the modules that you like, it's all in the 
 routing:
 
-/:version([0-9]+)/:module([a-z]+)/:item([a-z0-9]+)?/:operation([a-z]+)?
+/:version([0-9]+)/:module([a-z]+)/:item([a-z0-9]+)?/:child([a-z]+)?
 
 The main function checks which module has to be called and loads the module's
 file, for example posting a request to "/1/admin" will load the admin.js
