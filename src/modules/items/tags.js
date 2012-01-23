@@ -10,6 +10,10 @@ var tags = (function () {
         data.instance().collection("items").push(itemId, { tags: tags }, callback);
     };
     
+    module.deleteTag = function(itemId, tags, callback) {
+        data.instance().collection("items").pull(itemId, { tags: tags }, callback);
+    }
+    
     return module;
     
 }());

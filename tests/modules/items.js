@@ -7,7 +7,7 @@ var contentItem = {
     "title": "title test",
     "summary": "summary test",
     "text": "text test",
-    "code": "",
+    "code": "code" + Math.random(),
     "active": true,
     "images": [],
     "tags": []
@@ -25,20 +25,25 @@ var addItem = function() {
     //add new Item
     items.addItem(contentItem, function(err, item) {
         unitTest.notEqual(item._id, null);
-        //get item and check if it's equal to the original object
+        // get item and check if it's equal to the original object
         getItem(item._id.toString(), function(obj) {
             unitTest.notEqual(obj._id, null);
             unitTest.equal(contentItem.title, obj.title);
             unitTest.equal(contentItem.summary, obj.summary);
             unitTest.equal(contentItem.text, obj.text);
             unitTest.equal(contentItem.active, obj.active);
+            //assign id
+            contentItem._id = obj._id;
             //get by code
             getItemByCode(item.code, function(obj) {
                 if(contentItem.code) {
                     unitTest.equal(obj.length, 1);
                 }
-                //delete
-                deleteItem(obj[0]._id);
+                //add tag
+                addTag(obj[0]._id, ['tag1', 'tag2'], function(obj) {
+                    //delete
+                    deleteItem(contentItem._id);
+                });
             });
         });
     });
@@ -70,8 +75,18 @@ var getItemByCode = function(code, callback) {
 
 var addTag = function(itemId, itemTags, callback) {
     var id = itemId;
-    tags.addTag(id.toString(), itemTags, function(err, obj) {
+    tags.addTag(id.toString(), itemTags, function(err, added) {
         unitTest.equal(null, err);
+        unitTest.equal(added, 1);
         callback(id);
     });
-}
+};
+
+var deleteTag = function(itemId, itemTags, callback) {
+    var id = itemId;
+    tags.deleteTag(id.toString(), itemTags, function(err, deleted) {
+        unitTest.equal(null, err);
+        unitTest.equal(deleted, 1);
+        callback(id);
+    });
+};

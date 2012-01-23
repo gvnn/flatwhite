@@ -19,6 +19,18 @@ var items = (function () {
                     //new item
                     executePost(req, res);
                     break;
+                case "get":
+                    //get item
+                    executeGet(req, res);
+                    break;
+                case "delete":
+                    //delete item
+                    executeDelete(req, res);
+                    break;
+                case "put":
+                    //update
+                    executePut(req, res);
+                    break;
             }
         } catch(err) {
             utils.log(err, true);
@@ -44,7 +56,7 @@ var items = (function () {
                     });
                     break;
                 case "images":
-                    images.addImage(req.params.item, req, res);
+                    //images.addImage(req.params.item, req, res);
                     break;
             }
         } else {
@@ -76,6 +88,10 @@ var items = (function () {
                 }
             });
         }
+    };
+    
+    executeGet = function(req, res) {
+        
     };
     
     module.addItem = function(item, callback) {

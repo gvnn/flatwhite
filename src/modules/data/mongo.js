@@ -59,6 +59,7 @@ var mongo = (function () {
                             callback(err, docs[0]);
                         });
                     } catch(err) {
+                        module.client.close();
                         callback(err, null);
                     }
                 });
@@ -72,10 +73,30 @@ var mongo = (function () {
                 this.getCollection(function(err, coll) {
                     try {
                         bsonId = new module.client.bson_serializer.ObjectID(itemId);
-                        coll.update({ _id: bsonId }, {"$pushAll": objectToAdd }, { safe:true }, function(err) {
-                            callback(err);
+                        coll.update({ _id: bsonId }, {"$pushAll": objectToAdd }, { safe:true }, function(err, pushed) {
+                            module.client.close();
+                            callback(err, pushed);
                         });
                     } catch(err) {
+                        callback(err, null);
+                    }
+                });
+            },
+            
+            pull: function(id, obj, c) {
+                var itemId = id;
+                var callback = c;
+                var collectionToRemove = obj;
+                
+                this.getCollection(function(err, coll) {
+                    try {
+                        bsonId = new module.client.bson_serializer.ObjectID(itemId);
+                        coll.update({ _id: bsonId }, {"$pullAll": collectionToRemove }, { safe:true }, function(err, pulled) {
+                            module.client.close();
+                            callback(err, pulled);
+                        });
+                    } catch(err) {
+                        module.client.close();
                         callback(err, null);
                     }
                 });
