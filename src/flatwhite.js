@@ -24,6 +24,9 @@ if(config.auth) {
 //add body parser for post
 server.use(connect.bodyParser());
 
+//add parser for querystring
+server.use(connect.query());
+
 //set routes
 server.use('/',
     connect.router(function(app) {
