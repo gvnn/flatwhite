@@ -8,6 +8,10 @@ Requirements
   Node.js: http://nodejs.org/
   Connect: http://senchalabs.github.com/connect/
   nodeunit: https://github.com/caolan/nodeunit
+  
+License
+-------------
+Flatwhite is released under the MIT license
 
 Database
 -------------
@@ -26,7 +30,6 @@ Database
 
 The idea
 -------------
-
 Flatwhite is a very simple CMS, without any GUI, only REST APIs... That's it!
 
   Version 1
@@ -43,7 +46,6 @@ Flatwhite is a very simple CMS, without any GUI, only REST APIs... That's it!
 
 Build modules
 -------------
-
 Flatwhite allows you to write all the modules that you like, it's all in the 
 routing:
 
@@ -56,15 +58,18 @@ process.
 
 Database modules
 -------------
-
 Flatwhite implements a very simple data abstraction layer. Similar to modules,
 the "driver" has to be saved in the modules/data folder and has to implement
 the "collection" object that expose the operations available on a specific
 collection of items (add, get, remove, update, list, find, etc...)
-  
+
+Documentation
+------------- 
+Modules documentation files are in the docs folder
+
 Debug
 -------------
 Flatwhite uses by default the 8080 port, if you want to use node-inspector
-this is a working comman line:
+this is a working command line:
 
 $ node-inspector --web-port=8081  & node --debug flatwhite.js

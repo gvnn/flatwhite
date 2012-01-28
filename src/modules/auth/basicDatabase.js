@@ -28,7 +28,7 @@ var basicDatabase = (function () {
         module.validate(credentials[0], credentials[1], function(result){
             if (result) {
                 req.remoteUser = credentials[0];
-                console.log("user authenticated: " + req.remoteUser);
+                utils.log("user authenticated: " + req.remoteUser);
                 next();
             } else {
                 unauthorized(res, realm);

@@ -1,4 +1,4 @@
-var images = (function () {
+var itemImages = (function () {
     
     var module = {};
     
@@ -8,4 +8,4 @@ var images = (function () {
     
 }());
 
-module.exports = images;
+module.exports = itemImages;

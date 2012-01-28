@@ -1,6 +1,6 @@
 var data = require("../data");
 
-var tags = (function () {
+var itemTags = (function () {
     
     var module = {};
     
@@ -18,4 +18,4 @@ var tags = (function () {
     
 }());
 
-module.exports = tags;
+module.exports = itemTags;

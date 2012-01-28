@@ -1,7 +1,7 @@
 var utils = require("../utils");
 var data = require("./data");
-var tags = require("./items/tags");
-var images = require("./items/images");
+var itemTags = require("./items/itemTags");
+var itemImages = require("./items/itemImages");
 
 /*
 Content items manager
@@ -38,14 +38,14 @@ var items = (function () {
         }
     };
     
-    executePost = function(req, res) {
+    var executePost = function(req, res) {
         //check if the action is related to a child item
         if(req.params.child) {
             //execute child module
             switch(req.params.child) {
                 case "tags":
                     //add tag
-                    tags.addTag(req.params.item, req.body.tag.split(","), function(err, obj) {
+                    itemTags.addTag(req.params.item, req.body.tag.split(","), function(err, obj) {
                         if(err) {
                             utils.log("error adding tag", true);
                             utils.responseError(res, err);
@@ -90,8 +90,53 @@ var items = (function () {
         }
     };
     
-    executeGet = function(req, res) {
-        
+    var executeDelete = function(req, res) {
+        utils.log("contentitem delete");
+        itemId = req.params.item != null ? req.params.item : "";
+        if(itemId != "") {
+            module.deleteItem(itemId, function(err, obj) {
+                if(err) {
+                    utils.log("error in delete item", true);
+                    utils.responseError(res, err);
+                } else {
+                    utils.log("content item deleted successfully");
+                    utils.response(res, "deleted content item " + itemId);
+                }
+            });
+        } else {
+            utils.log("invalid content item id", true);
+            utils.responseError(res, "invalid content item id");
+        }
+    };
+    
+    //gets the whole object
+    var executeGet = function(req, res) {
+        //first search by id, otherwise by code
+        itemId = req.params.item != null ? req.params.item : "";
+        utils.log("item get");
+        module.getItem(itemId, function(err, obj) {
+            if(err) {
+                utils.log("error searching content item, search by code", true);
+                
+                module.getItemByCode(itemId, function(err, obj) {
+                    if(err) {
+                        utils.log("error in retrieve item", true);
+                        utils.responseError(res, err);
+                    } else {
+                        utils.log(obj == null ? "item null" : "item returned successfully");
+                        utils.responseObject(res, obj);
+                    }
+                });
+                
+            } else {
+                utils.log(obj == null ? "item not found" : "item returned successfully");
+                if(obj == null) {
+                    utils.notFound(res, obj);
+                } else {
+                    utils.responseObject(res, obj);
+                }
+            }
+        });
     };
     
     module.addItem = function(item, callback) {
@@ -144,7 +189,7 @@ var items = (function () {
                 if(obj.length > 0) {
                     callback("error updating item, code already exists. choose a different code or live it empty", null);
                 } else {
-                    data.instance().collection("admin").update(id, { 
+                    data.instance().collection("items").update(id, { 
                         title: item.title,
                         summary: item.summary,
                         text: item.text,
@@ -154,7 +199,7 @@ var items = (function () {
                 }
             });
         } else {
-            data.instance().collection("admin").update(id, { 
+            data.instance().collection("items").update(id, { 
                 title: item.title,
                 summary: item.summary,
                 text: item.text,

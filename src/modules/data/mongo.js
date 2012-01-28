@@ -176,20 +176,30 @@ var mongo = (function () {
              * @param f Fields to return
              * @param c Callback function
              */
-            list: function(w, f, c) {
+            list: function(w, f, c, s, l, o) {
                 var where = w;
                 var fields = f;
                 var callback = c;
+                var skip = s;
+                var limit = l;
+                var order = o;
                 this.getCollection(function(err, coll) {
                     try {
                         mongoFields = {};
                         for (var i=0; i < fields.length; i++) {
                             mongoFields[fields[i]] = 1;
                         }
-                        coll.find(where, mongoFields).toArray(function(err, docs) {
-                            module.client.close();
-                            callback(err, docs);
-                        });
+                        if(skip != null && limit != null) {
+                            coll.find(where, mongoFields, skip, limit).sort(order).toArray(function(err, docs) {
+                                module.client.close();
+                                callback(err, docs);
+                            });
+                        } else {
+                            coll.find(where, mongoFields).sort(order).toArray(function(err, docs) {
+                                module.client.close();
+                                callback(err, docs);
+                            });
+                        }
                     } catch(err) {
                         callback(err, null);
                     }

@@ -1,0 +1,9 @@
+New content item
+Url   /1/items
+Http  POST
+Parameters:
+  title     content item title
+  summary   item summary
+  text      content item body
+  code      unique code
+  active    true/false

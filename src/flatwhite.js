@@ -16,7 +16,7 @@ var server = connect.createServer();
 
 //check authentication required
 if(config.auth) {
-    console.log("authentication: " + config.auth);
+    utils.log("authentication: " + config.auth);
     _auth = require("./modules/auth/" + config.auth);
     server.use('/', _auth.authenticate);
 }

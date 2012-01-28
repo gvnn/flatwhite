@@ -8,6 +8,14 @@ exports.badRequest = function(res, message) {
     }
 };
 
+exports.notFound = function(res, message) {
+    if (res) {
+        res.statusCode = 404;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ error: message }));
+    }
+};
+
 exports.response = function(res, msg) {
     this.responseObject(res, { msg : msg });
 };
