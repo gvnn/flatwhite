@@ -10,7 +10,11 @@ var files = (function () {
     module.version = 1;
     
     module.execute = function (method, req, res, next) {
-        console.log(req.files);
+        //TODO
+        //add file to database
+        //move file
+        //return file obj
+        utils.notFound(res, null);
     };
     
     return module;
