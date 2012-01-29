@@ -23,7 +23,7 @@ var config = {
     logs: {
         enabled: true
     },
-    files {
+    files: {
         tmpDir: "files/tmp",
         repoDir: "files/repo"
     }
