@@ -24,6 +24,9 @@ if(config.auth) {
 //add body parser for post
 server.use(connect.bodyParser({uploadDir: config.files.tmpDir}));
 
+//TODO
+//if upload folder doesn't exist create...
+
 //add parser for querystring
 server.use(connect.query());
 
