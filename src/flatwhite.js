@@ -22,7 +22,7 @@ if(config.auth) {
 }
 
 //add body parser for post
-server.use(connect.bodyParser({uploadDir: config.uploadDir}));
+server.use(connect.bodyParser({uploadDir: config.files.tmpDir}));
 
 //add parser for querystring
 server.use(connect.query());
