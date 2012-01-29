@@ -5,9 +5,9 @@ Node.js REST API CMS... HTML, CSS, MVC?! No way, Jose!
 Requirements
 -------------
 
-  Node.js: http://nodejs.org/
-  Connect: http://senchalabs.github.com/connect/
-  nodeunit: https://github.com/caolan/nodeunit
+  Node.js, 0.6 or higher: http://nodejs.org/
+  Connect, 1.8.5 or higher: http://senchalabs.github.com/connect/
+  nodeunit, 0.6.2 or higher: https://github.com/caolan/nodeunit
   
 License
 -------------
@@ -39,11 +39,10 @@ Flatwhite is a very simple CMS, without any GUI, only REST APIs... That's it!
   Version 1
   Provide basic authentication and basic CMS. A content item has only Title,
   Summary, Text and Image properties. A content Item can have one or more
-  Tags.
+  Tags/Images.
 
   Version 2
-  Optional custom fields for content items, related content and more than one
-  picture per item. More Databases.
+  Optional custom fields for content items, related content. More Databases.
 
   Version x
   Is it really necessary?

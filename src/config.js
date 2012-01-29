@@ -22,7 +22,8 @@ var config = {
     },
     logs: {
         enabled: true
-    }
+    },
+    uploadDir: "../tmp"
 };
 
 module.exports = config;

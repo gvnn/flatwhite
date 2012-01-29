@@ -56,7 +56,9 @@ var items = (function () {
                     });
                     break;
                 case "images":
-                    //images.addImage(req.params.item, req, res);
+                    images.addImage(req, function(){
+                        utils.responseObject(res, null);
+                    });
                     break;
             }
         } else {
