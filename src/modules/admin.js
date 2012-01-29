@@ -66,9 +66,13 @@ var admin = (function () {
                     utils.log("error in retrieve admin", true);
                     utils.responseError(res, err);
                 } else {
-                    utils.log("admin returned successfully");
-                    delete obj["password"];
-                    utils.responseObject(res, obj);
+                    utils.log(obj == null ? "admin not found" : "admin returned successfully");
+                    if(obj == null) {
+                        utils.notFound(res, obj);
+                    } else {
+                        delete obj["password"];
+                        utils.responseObject(res, obj);
+                    }
                 }
             });
         } else {
@@ -109,17 +113,24 @@ var admin = (function () {
         var self = this;
         
         adminId = req.params.item != null ? req.params.item : "";
-        email = req.body.email != null ? req.body.email : "";
-        password = req.body.password != null ? req.body.password : "";
-        active = req.body.active != null ? req.body.active : "false";
+        itemToUpdate = {};
+        
+        //updates only the necessary
+        if(req.body.email != null) {
+            itemToUpdate["email"] = req.body.email;
+        }
+        
+        if(req.body.password != null) {
+            itemToUpdate["password"] = crypto.createHash('md5').update(req.body.password).digest("hex");
+        }
+        
+        if(req.body.active != null) {
+            itemToUpdate["active"] = Boolean(req.body.active);
+        }
         
         if(adminId != "") {
             utils.log("update user: " + adminId);
-            module.updateAdmin(adminId, {
-                    email: email, 
-                    password: password, 
-                    active: active
-                }, function(err, obj) {
+            module.updateAdmin(adminId, itemToUpdate, function(err, obj) {
                     if(err) {
                         utils.log("error updating admin", true);
                         utils.responseError(res, err);
@@ -144,11 +155,7 @@ var admin = (function () {
      */
     module.updateAdmin = function(id, admin, callback) {
         if(admin.email != "" && admin.password != "") {
-            data.instance().collection("admin").update(id, { 
-                    email: admin.email, 
-                    password: crypto.createHash('md5').update(admin.password).digest("hex"), 
-                    active: Boolean(admin.active) 
-                }, callback);
+            data.instance().collection("admin").update(id, admin, callback);
         } else {
             throw "error updating admin, fields missing";
         }

@@ -141,9 +141,10 @@ var items = (function () {
     var executePut = function(req, res) {
         utils.log("update item");
         
-        var itemId = req.params.item != null ? req.params.item : "";
-        var itemToUpdate = {};
+        itemId = req.params.item != null ? req.params.item : "";
+        itemToUpdate = {};
         
+        //updates only the necessary
         if(req.body.title != null) {
             itemToUpdate["title"] = req.body.title;
         }

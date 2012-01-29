@@ -51,7 +51,7 @@ var updateItem = function(id, test, callback) {
     request.post('PUT', 'items/' + objId, postData, function(res, chunk) {
         unitTest.equal(res.statusCode, 200);
         var response = JSON.parse(chunk);
-        callback();
+        callback(objId);
     });
 };
 

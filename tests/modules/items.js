@@ -1,5 +1,5 @@
 var items = require("../../src/modules/items");
-var tags = require("../../src/modules/items/tags");
+var tags = require("../../src/modules/items/itemTags");
 var config = require("../../src/config");
 var unitTest;
 
