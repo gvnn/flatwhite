@@ -7,9 +7,7 @@ var contentItem = {
     "summary": "summary test",
     "text": "text test",
     "code": "code" + Math.random(),
-    "active": true,
-    "images": [],
-    "tags": []
+    "active": true
 };
 
 exports.testItemsApi = function(test) {
@@ -23,17 +21,37 @@ var startTest = function(test) {
     addItem(test, function(responseObj) {
         //get item
         getItem(responseObj._id, unitTest, function(responseObj) {
+            //test on tags
             tagsTest(responseObj, unitTest, function() {
-                 //remove item
-                 deleteItem(responseObj._id, unitTest, function() {
-                     //check exists or not
-                     getItem(responseObj._id, unitTest, function(responseObj) {
-                         unitTest.equal(responseObj, null);
-                         unitTest.done();
-                     }, false);
-                 });
+                //update item
+                updateItem(responseObj._id, unitTest, function(itemId) {
+                    //remove item
+                    deleteItem(itemId, unitTest, function(itemId) {
+                        //check exists or not
+                        getItem(itemId, unitTest, function(responseObj) {
+                            unitTest.equal(responseObj, null);
+                            unitTest.done();
+                        }, false);
+                    });
+                });
             });
         });
+    });
+};
+
+var updateItem = function(id, test, callback) {
+    unitTest = test;
+    objId = id;
+    var postData = querystring.stringify({
+        "title" : contentItem.title + Math.random(),
+        "summary": contentItem.summary + Math.random(),
+        "text": contentItem.text + Math.random(),
+        "active": !contentItem.active
+    });
+    request.post('PUT', 'items/' + objId, postData, function(res, chunk) {
+        unitTest.equal(res.statusCode, 200);
+        var response = JSON.parse(chunk);
+        callback();
     });
 };
 
@@ -80,9 +98,10 @@ var getByTag = function(tag, test, callback) {
 };
 
 var deleteItem = function(id, test, callback) {
+    objId = id;
     request.post('DELETE', 'items/' + id, '', function(res, chunk) {
         unitTest.equal(res.statusCode, 200);
-        callback();
+        callback(objId);
     });
 };
 

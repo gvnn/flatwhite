@@ -161,7 +161,7 @@ var mongo = (function () {
                 this.getCollection(function(err, coll) {
                     try {
                         bsonId = new module.client.bson_serializer.ObjectID(itemId);
-                        coll.update({ _id: bsonId }, obj, { safe:true }, function(err) {
+                        coll.update({ _id: bsonId }, { $set : obj }, { safe:true }, function(err) {
                             callback(err);
                         });
                     } catch(err) {

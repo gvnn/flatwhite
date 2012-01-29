@@ -1,3 +1,7 @@
+Content Items module
+
+this module provides all the functionalities to manage content items
+
 New content item
 Url   /1/items
 Http  POST

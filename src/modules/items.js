@@ -109,7 +109,6 @@ var items = (function () {
         }
     };
     
-    //gets the whole object
     var executeGet = function(req, res) {
         //first search by id, otherwise by code
         itemId = req.params.item != null ? req.params.item : "";
@@ -137,6 +136,51 @@ var items = (function () {
                 }
             }
         });
+    };
+    
+    var executePut = function(req, res) {
+        utils.log("update item");
+        
+        var itemId = req.params.item != null ? req.params.item : "";
+        var itemToUpdate = {};
+        
+        if(req.body.title != null) {
+            itemToUpdate["title"] = req.body.title;
+        }
+        
+        if(req.body.summary != null) {
+            itemToUpdate["summary"] = req.body.summary;
+        }
+        
+        if(req.body.text != null) {
+            itemToUpdate["text"] = req.body.text;
+        }
+        
+        if(req.body.code != null) {
+            itemToUpdate["code"] = req.body.code;
+        }
+        
+        if(req.body.active != null) {
+            itemToUpdate["active"] = Boolean(req.body.active);
+        }
+        
+        if(itemId != "") {
+            utils.log("update item: " + itemId);
+            module.updateItem(itemId, 
+                itemToUpdate
+                , function(err, obj) {
+                    if(err) {
+                        utils.log("error updating item", true);
+                        utils.responseError(res, err);
+                    } else {
+                        utils.log("item updated successfully");
+                        utils.response(res, "updated item " + itemId);
+                    }
+                });
+        } else {
+            utils.log("invalid id", true);
+            utils.responseError(res, "invalid id");
+        }
     };
     
     module.addItem = function(item, callback) {
@@ -184,28 +228,16 @@ var items = (function () {
     
     module.updateItem = function(id, item, callback) {
         //if code is not empty check if another one exists
-        if(item.code) {
+        if(item.code != null) {
             module.getItemByCode(item.code, function(err, obj) {
                 if(obj.length > 0) {
                     callback("error updating item, code already exists. choose a different code or live it empty", null);
                 } else {
-                    data.instance().collection("items").update(id, { 
-                        title: item.title,
-                        summary: item.summary,
-                        text: item.text,
-                        code: item.code,
-                        active: Boolean(item.active)
-                    }, callback);
+                    data.instance().collection("items").update(id, item, callback);
                 }
             });
         } else {
-            data.instance().collection("items").update(id, { 
-                title: item.title,
-                summary: item.summary,
-                text: item.text,
-                code: item.code,
-                active: Boolean(item.active)
-            }, callback);
+            data.instance().collection("items").update(id, item, callback);
         }
     };
     
