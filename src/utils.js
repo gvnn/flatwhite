@@ -16,6 +16,10 @@ exports.notFound = function(res, message) {
     }
 };
 
+exports.getFileExtension = function(filename) {
+    return filename.split('.').pop();
+};
+
 exports.response = function(res, msg) {
     this.responseObject(res, { msg : msg });
 };

@@ -116,7 +116,7 @@ var options = {
     host : config.server.ip,
     port : config.server.port,
     path : '/1/files',
-    method : 'PUT',
+    method : 'POST',
     encoding : 'utf8'
 };
 
