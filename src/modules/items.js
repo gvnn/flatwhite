@@ -1,7 +1,7 @@
 var utils = require("../utils");
 var data = require("./data");
 var itemTags = require("./items/itemTags");
-var itemImages = require("./items/itemImages");
+var itemFiles = require("./items/itemFiles");
 
 /*
 Content items manager
@@ -55,9 +55,17 @@ var items = (function () {
                         }
                     });
                     break;
-                case "images":
-                    images.addImage(req, function(){
-                        utils.responseObject(res, null);
+                case "files":
+                    url = req.body.url != null ? req.body.url : "";
+                    type = req.body.type != null ? req.body.type : "";
+                    itemFiles.addFile(req.params.item, [{"url": url, "type": type}], function(err, obj) {
+                        if(err) {
+                            utils.log("error adding file", true);
+                            utils.responseError(res, err);
+                        } else {
+                            utils.log("file added successfully");
+                            utils.responseObject(res, obj);
+                        }
                     });
                     break;
             }

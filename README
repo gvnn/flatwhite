@@ -38,8 +38,7 @@ Flatwhite is a very simple CMS, without any GUI, only REST APIs... That's it!
 
   Version 1
   Provide basic authentication and basic CMS. A content item has only Title,
-  Summary, Text and Image properties. A content Item can have one or more
-  Tags/Images.
+  Summary, Text. A content Item can have one or more Tags/Files.
 
   Version 2
   Optional custom fields for content items, related content. More Databases.
