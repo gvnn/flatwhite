@@ -9,7 +9,7 @@ var contentItem = {
     "text": "text test",
     "code": "code" + Math.random(),
     "active": true,
-    "images": [],
+    "files": [],
     "tags": []
 };
 

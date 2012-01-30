@@ -56,6 +56,7 @@ var items = (function () {
                     });
                     break;
                 case "files":
+                    //add file
                     url = req.body.url != null ? req.body.url : "";
                     type = req.body.type != null ? req.body.type : "";
                     itemFiles.addFile(req.params.item, [{"url": url, "type": type}], function(err, obj) {
@@ -87,7 +88,7 @@ var items = (function () {
                 code: code,
                 active: active,
                 tags: [],
-                images: []
+                files: []
             }, function(err, obj) {
                 if(err) {
                     utils.log("error adding content item", true);
@@ -208,7 +209,7 @@ var items = (function () {
                             code: item.code,
                             active: Boolean(item.active),
                             tags: item.tags,
-                            images: item.images
+                            files: item.files
                         }, callback);
                 }
             });
@@ -220,7 +221,7 @@ var items = (function () {
                     code: item.code,
                     active: Boolean(item.active),
                     tags: item.tags,
-                    images: item.images
+                    files: item.files
                 }, callback);
         }
     };
