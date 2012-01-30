@@ -68,7 +68,7 @@ function postData(fields, files, options, headers, callback) {
         response.body = '';
         response.setEncoding(options.encoding);
         response.on('data', function(chunk){
-            console.log(chunk);
+            //console.log(chunk);
             response.body += chunk;
         });
         response.on('end', function() {
@@ -82,7 +82,7 @@ function postData(fields, files, options, headers, callback) {
     request.end();
 }
  
-function postImage(options, filename, headers) {
+function postImage(options, filename, headers, callback) {
     Step(
         function readImage()
         {
@@ -96,7 +96,8 @@ function postImage(options, filename, headers) {
             postData(null, [{type: 'image/png', keyname: 'coffee.png', valuename: 'coffee.png', data: filecontents}], options, headers, this);
         },
         function(err, response) {
-            console.log("response code " + response.statusCode);
+            //console.log("response code " + response.statusCode);
+            callback(response);
         }
     );
 }
@@ -112,6 +113,7 @@ var interface = {
 module.exports = interface;
  
 //======= USAGE ============================================================
+/*
 var options = {
     host : config.server.ip,
     port : config.server.port,
@@ -119,5 +121,5 @@ var options = {
     method : 'POST',
     encoding : 'utf8'
 };
-
-postImage(options, "../images/coffee.png", {});
+*/
+//postImage(options, "../images/coffee.png", {});

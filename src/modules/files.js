@@ -87,7 +87,19 @@ var files = (function () {
     };
     
     module.deleteFile = function(id, callback) {
-        data.instance().collection("files").remove(id, callback);
+        data.instance().collection("files").get(id, function(err, objFound) {
+            if(objFound != null) {
+                data.instance().collection("files").remove(id, function(err, obj) {
+                    //remove file
+                    fs.unlink(config.files.repoDir + "/" + objFound._id + "." + objFound.extension, function (err) {
+                        if (err) throw err;
+                        callback(err, null);
+                    });
+                });
+            } else {
+                callback("not found", null);
+            }
+        });
     };
     
     var executeGet = function(req, res) {
