@@ -63,15 +63,13 @@ var tagsTest = function(o, test, callback) {
         //get list by tag
         getByTag('tag1', unitTest, function(items) {
             //check item in there
-            found = false;
+            notfound = true;
             for (var i=0; i < items.length; i++) {
-                found = (items[i]._id == obj._id);
-                if(found)
+                notfound = !(items[i]._id == obj._id);
+                if(!notfound)
                     break;
             };
-            unitTest.ok(found);
-            
-            //remove tag
+            unitTest.ok(notfound);
             callback();
         });
     });
@@ -82,6 +80,18 @@ var addTag = function(id, test, callback) {
     objId = id;
     var postData = querystring.stringify({"tag" : "tag1, tag2" });
     request.post('POST', 'items/' + objId + '/tags', postData, function(res, chunk) {
+        unitTest.equal(res.statusCode, 200);
+        var response = JSON.parse(chunk);
+        //remove tag
+        deleteTag(objId, unitTest, callback);
+    });
+};
+
+var deleteTag = function(id, test, callback) {
+    unitTest = test;
+    objId = id;
+    var postData = querystring.stringify({"tag" : "tag1" });
+    request.post('DELETE', 'items/' + objId + '/tags', postData, function(res, chunk) {
         unitTest.equal(res.statusCode, 200);
         var response = JSON.parse(chunk);
         callback();

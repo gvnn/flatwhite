@@ -102,18 +102,51 @@ var items = (function () {
     };
     
     var executeDelete = function(req, res) {
-        utils.log("contentitem delete");
+        utils.log("content item delete");
         itemId = req.params.item != null ? req.params.item : "";
         if(itemId != "") {
-            module.deleteItem(itemId, function(err, obj) {
-                if(err) {
-                    utils.log("error in delete item", true);
-                    utils.responseError(res, err);
-                } else {
-                    utils.log("content item deleted successfully");
-                    utils.response(res, "deleted content item " + itemId);
+            if(req.params.child) {
+                //execute child module
+                switch(req.params.child) {
+                    case "tags":
+                        //delete tag
+                        itemTags.deleteTag(req.params.item, req.body.tag.split(","), function(err, obj) {
+                            if(err) {
+                                utils.log("error adding tag", true);
+                                utils.responseError(res, err);
+                            } else {
+                                utils.log("tag added successfully");
+                                utils.responseObject(res, obj);
+                            }
+                        });
+                        break;
+                    case "files":
+                        //delete file
+                        url = req.body.url != null ? req.body.url : "";
+                        type = req.body.type != null ? req.body.type : "";
+                        itemFiles.deleteFile(req.params.item, [{"url": url, "type": type}], function(err, obj) {
+                            if(err) {
+                                utils.log("error adding file", true);
+                                utils.responseError(res, err);
+                            } else {
+                                utils.log("file added successfully");
+                                utils.responseObject(res, obj);
+                            }
+                        });
+                        break;
                 }
-            });
+            } else {
+                //delete item
+                module.deleteItem(itemId, function(err, obj) {
+                    if(err) {
+                        utils.log("error in delete item", true);
+                        utils.responseError(res, err);
+                    } else {
+                        utils.log("content item deleted successfully");
+                        utils.response(res, "deleted content item " + itemId);
+                    }
+                });
+            }
         } else {
             utils.log("invalid content item id", true);
             utils.responseError(res, "invalid content item id");
