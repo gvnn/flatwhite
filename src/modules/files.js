@@ -32,6 +32,25 @@ var files = (function () {
         }
     };
     
+    var executeDelete = function(req, res) {
+        utils.log("file delete");
+        itemId = req.params.item != null ? req.params.item : "";
+        if(itemId != "") {
+            module.deleteFile(itemId, function(err, obj) {
+                if(err) {
+                    utils.log("error in delete file", true);
+                    utils.responseError(res, err);
+                } else {
+                    utils.log("file deleted successfully");
+                    utils.response(res, "deleted file " + itemId);
+                }
+            });
+        } else {
+            utils.log("invalid file id", true);
+            utils.responseError(res, "invalid content item id");
+        }
+    };
+    
     var executePost = function(req, res) {
         //it saves only on file... deal with it
         for(var file in req.files) {
@@ -65,6 +84,43 @@ var files = (function () {
                 utils.badRequest(res, "forgot something?");
             }
         }
+    };
+    
+    module.deleteFile = function(id, callback) {
+        data.instance().collection("files").remove(id, callback);
+    };
+    
+    var executeGet = function(req, res) {
+        var page = req.query.page != null ? req.query.page : 1;
+        var size = req.query.size != null ? req.query.size : 10;
+        var fields = req.query.fields != null ? req.query.fields : "";
+        var orderby = req.query.orderby != null ? req.query.orderby : "_id";
+        var orderdirection = req.query.orderdirection != null ? req.query.orderdirection : "asc";
+        
+        utils.log("get files page " + page + " size " + size);
+        module.getFiles(page, size, fields, orderby, orderdirection, function(err, obj) {
+            if(err) {
+                utils.log("error getting items", true);
+                utils.responseError(res, err);
+            } else {
+                utils.log("items returned successfully");
+                utils.responseObject(res, obj);
+            }
+        });
+    };
+    
+    module.getFiles = function(page, size, fields, orderby, orderdirection, callback) {
+        var queryFields = [];
+        if (fields.length > 0) {
+            queryFields = fields.split(",")
+        };
+        
+        var skip = size * (page - 1);
+        
+        var orderObj = {};
+        orderObj[orderby] = (orderdirection == "asc" ? 1 : -1);
+        
+        data.instance().collection("items").list({}, queryFields, callback, skip, size, orderObj);
     };
     
     return module;
