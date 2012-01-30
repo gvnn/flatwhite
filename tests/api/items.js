@@ -70,7 +70,7 @@ var tagsTest = function(o, test, callback) {
                     break;
             };
             unitTest.ok(notfound);
-            callback();
+            fileTest(obj, unitTest, callback);
         });
     });
 };
@@ -148,4 +148,37 @@ var getItem = function(id, test, callback, check) {
         callback(response);
     });
 
+};
+
+
+var addFile = function(id, test, callback) {
+    unitTest = test;
+    objId = id;
+    var postData = querystring.stringify({"url" : "http://domain.com/test.txt", "type": "image" });
+    request.post('POST', 'items/' + objId + '/files', postData, function(res, chunk) {
+        unitTest.equal(res.statusCode, 200);
+        var response = JSON.parse(chunk);
+        //remove file
+        deleteFile(objId, unitTest, callback);
+    });
+};
+
+var deleteFile = function(id, test, callback) {
+    unitTest = test;
+    objId = id;
+    var postData = querystring.stringify({"url" : "http://domain.com/test.txt", "type": "image" });
+    request.post('DELETE', 'items/' + objId + '/files', postData, function(res, chunk) {
+        unitTest.equal(res.statusCode, 200);
+        var response = JSON.parse(chunk);
+        callback();
+    });
+};
+
+var fileTest = function(o, test, callback) {
+    obj = o;
+    unitTest = test;
+    //add tag
+    addFile(obj._id, unitTest, function() {
+        callback();
+    });
 };

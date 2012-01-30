@@ -1,3 +1,5 @@
+var data = require("../data");
+
 var itemFiles = (function () {
     
     var module = {};
