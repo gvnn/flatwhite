@@ -1,5 +1,6 @@
 var connect = require('connect'),
     config = require('./config'),
+    fs = require('fs'),
     utils = require("./utils");
 
 var loader = function(method, req, res, next) {
@@ -24,8 +25,22 @@ if(config.auth) {
 //add body parser for post
 server.use(connect.bodyParser({uploadDir: config.files.tmpDir}));
 
-//TODO
-//if upload folder doesn't exist create...
+//create temp upload folder and repo
+fs.realpath(config.files.tmpDir, function(err, resolvedPath) {
+    if(resolvedPath == null) {
+        fs.mkdir(config.files.tmpDir, '755', function() {
+            utils.log(config.files.tmpDir + " created");
+        });
+    }
+});
+
+fs.realpath(config.files.repoDir, function(err, resolvedPath) {
+    if(resolvedPath == null) {
+        fs.mkdir(config.files.repoDir, '755', function() {
+            utils.log(config.files.repoDir + " created");
+        });
+    }
+});
 
 //add parser for querystring
 server.use(connect.query());
