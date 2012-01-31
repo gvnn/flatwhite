@@ -20,7 +20,7 @@ exports.testFilesModule = function(test) {
 var startTest = function(test) {
     unitTest = test;
     //upload file
-    upload.postImage(options, "../images/coffee.png", {}, function(response) {
+    upload.postImage(options, "images/coffee.png", {}, function(response) {
         //delete file
         var newFile = JSON.parse(response.body);
         deleteFile(newFile._id, unitTest, function() {
