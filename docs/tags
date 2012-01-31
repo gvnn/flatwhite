@@ -1,0 +1,18 @@
+Tags module
+-------------
+Module that displays content items by tag
+
+
+Methods
+-------------
+This module has only one method: 
+
+  http://[host]:[port]/[version]/tags/[tag]
+  
+The query string parameters allowed are:
+
+  page: number of the page, default 1
+  size: number of items per page, default 10
+  fields: fields to retrieve, default all
+  orderby: field to order by, default _id
+  orderdirection: order direction, default asc
