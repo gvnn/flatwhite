@@ -36,10 +36,20 @@ var mongo = (function () {
             getCollection: function(c) {
                 var callback = c;
                 module.client.open(function(err, p_client) {
-                    utils.log("collection selected: " + name);
-                    module.client.collection(name, function (err, coll) {
-                        c(err, coll);
-                    });
+                    //check if required auth
+                    if(module.configuration.user != null && module.configuration.password != null) {
+                        module.client.authenticate(module.configuration.user, module.configuration.password, function(err, replies) {
+                            utils.log("collection selected: " + name);
+                            module.client.collection(name, function (err, coll) {
+                                callback(err, coll);
+                            });
+                        });
+                    } else {
+                        utils.log("collection selected: " + name);
+                        module.client.collection(name, function (err, coll) {
+                            c(err, coll);
+                        });
+                    }                    
                 });
             },
             
