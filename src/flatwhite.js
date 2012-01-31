@@ -11,7 +11,7 @@ var loader = function(method, req, res, next) {
         
     //check json callback
     res['jsonCallback'] = req.query.callback != null ? req.query.callback : null;
-
+    utils.log('callback: ' + res.jsonCallback);
     _module = require("./modules/" + req.params.module);
     _module.execute(method, req, res, next);
 };

@@ -78,6 +78,7 @@ var items = (function () {
             text = req.body.text != null ? req.body.text : "";
             code = req.body.code != null ? req.body.code : "";
             active = req.body.active != null ? req.body.active : "false";
+            tags = req.body.tags != null ? req.body.tags.split(",") : [];
             
             utils.log("adding item: " + code);
             
@@ -87,7 +88,7 @@ var items = (function () {
                 text: text, 
                 code: code,
                 active: active,
-                tags: [],
+                tags: tags,
                 files: []
             }, function(err, obj) {
                 if(err) {
