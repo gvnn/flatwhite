@@ -1,0 +1,39 @@
+Admins module
+-------------
+Very simple user authentication
+
+Methods
+-------------
+
+Add Admin
+
+  url: http://[host]:[port]/[version]/admin
+  method: POST
+  parameters:
+    * email     admin's email
+    * password  admin's password
+    * active    true/false
+    
+Get Admin
+
+  url: http://[host]:[port]/[version]/admin/[admin id]
+  method: GET
+  parameters: none
+  
+Get list
+
+  url: http://[host]:[port]/[version]/admin
+  method: GET
+  parameters: none
+
+Delete Admin
+
+  url: http://[host]:[port]/[version]/admin/[admin id]
+  method: DELETE
+  parameters: none
+  
+Update Admin
+
+  url: http://[host]:[port]/[version]/admin/[admin id]
+  method: PUT
+  parameters: same as add admin
