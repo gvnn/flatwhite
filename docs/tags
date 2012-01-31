@@ -7,7 +7,8 @@ Methods
 -------------
 This module has only one method: 
 
-  http://[host]:[port]/[version]/tags/[tag]
+  url: http://[host]:[port]/[version]/tags/[tag]
+  method: GET
   
 The query string parameters allowed are:
 

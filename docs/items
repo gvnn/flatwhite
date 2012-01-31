@@ -1,13 +1,66 @@
-Content Items module
+Items module
+-------------
+This module provides all the functionalities to manage content items.
 
-this module provides all the functionalities to manage content items
+Methods
+-------------
 
-New content item
-Url   /1/items
-Http  POST
-Parameters:
-  title     content item title
-  summary   item summary
-  text      content item body
-  code      unique code
-  active    true/false
+Add item
+
+  url: http://[host]:[port]/[version]/items
+  method: POST
+  parameters:
+    * title     content item title
+    * summary   item summary
+    * text      content item body
+    * code      unique code
+    * active    true/false
+    * tags      coma separated list
+
+Delete item
+
+  url: http://[host]:[port]/[version]/items/[item id]
+  method: DELETE
+  parameters: none
+  
+Update item
+
+  url: http://[host]:[port]/[version]/items/[item id]
+  method: PUT
+  parameters: same as add item
+  
+Get Item
+
+  url: http://[host]:[port]/[version]/items/[item id or code]
+  method: GET
+  parameters: none
+  
+Associate tag(s)
+
+  url: http://[host]:[port]/[version]/items/[item id or code]/tags
+  method: POST
+  parameters:
+    * tag   coma separated list
+
+Remove tag(s)
+  
+  url: http://[host]:[port]/[version]/items/[item id or code]/tags
+  method: DELETE
+  parameters:
+    * tag   coma separated list
+    
+Associate file
+  
+  url: http://[host]:[port]/[version]/items/[item id or code]/files
+  method: POST
+  parameters:
+    * url   file url
+    * type  file type
+    
+Remove file
+
+    url: http://[host]:[port]/[version]/items/[item id or code]/files
+    method: DELETE
+    parameters:
+      * url   file url
+      * type  file type

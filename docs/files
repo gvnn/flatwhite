@@ -1,0 +1,29 @@
+Files module
+-------------
+This module allows to upload and manage files
+
+Methods
+-------------
+
+Add file
+
+  url: http://[host]:[port]/[version]/files
+  method: POST
+  parameters: none, except the multipart file
+  
+Delete file
+
+  url: http://[host]:[port]/[version]/files/[file id]
+  method: DELETE
+  parameters: none
+  
+Get files
+
+    url: http://[host]:[port]/[version]/files
+    method: GET
+    parameters:
+      * page            number of the page, default 1
+      * size            number of items per page, default 10
+      * fields          fields to retrieve, default all
+      * orderby         field to order by, default _id
+      * orderdirection  order direction, default asc
