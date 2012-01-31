@@ -8,6 +8,10 @@ var loader = function(method, req, res, next) {
         ", module: " + req.params.module + 
         ", item: " + req.params.item + 
         ", child: " + req.params.child);
+        
+    //check json callback
+    res['jsonCallback'] = req.query.callback != null ? req.query.callback : null;
+
     _module = require("./modules/" + req.params.module);
     _module.execute(method, req, res, next);
 };
