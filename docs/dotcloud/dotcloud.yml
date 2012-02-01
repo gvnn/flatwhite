@@ -1,0 +1,6 @@
+www:
+  type: nodejs
+  approot: root
+
+data:
+  type: mongodb

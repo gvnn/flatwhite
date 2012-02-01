@@ -1,0 +1,8 @@
+{
+    "name": "flatwhite",
+    "version": "1.0.0",
+    "dependencies": {
+        "connect": "1.8.5",
+        "mongodb": "0.9.8-4"
+    }
+}

@@ -1,0 +1,58 @@
+DotCloud Configuration
+-------------
+Simple instruction to set up a free instance on dotcloud
+
+Install dotcoud CLI 
+
+  http://docs.dotcloud.com/firststeps/install/
+  
+Create a dotcloud application
+
+  $ dotcloud create flatwhite
+  
+Create a dotcloud folder, e.g. dotcloud
+
+Copy the file dotcloud.yml into the dotcloud folder.
+
+Create a folder named root and copy flatwhite's code
+
+Add the package.json file to the root folder
+
+Push the application
+  
+  $ dotcloud push flatwhite dotcloud/
+  
+Get the data access details
+
+  $ dotcloud info flatwhite.data
+  
+Access to the mongo instance and create a user that can accedd to flatwhite's db
+
+  $ dotcloud run flatwhite.data mongo
+  MongoDB shell version: 1.8.2
+  connecting to: test
+  > use admin
+  switched to db admin
+  > db.auth("root", "password");
+  1
+  > use flatwhite
+  > db.getSisterDB("admin").auth("root", "password");
+  1
+  > db.addUser("flatwhite", "password");
+  1
+
+Configure the config.js with dotcloud credentials
+
+  {
+    name: "mongo",
+    db: "flatwhite",
+    server: "12345-67890-data-0.dotcloud.com",
+    port: 22173,
+    user: "flatwhite",
+    password: "password"
+  } //,...
+
+Push the cconfig changes
+  
+  $ dotcloud push flatwhite dotcloud/
+  
