@@ -11,7 +11,8 @@ var mongo = (function () {
     var module = {};
     
     module.configuration = config.data.repositories[config.data.selectedRepository];
-    module.client = new Db(module.configuration.db, new Server(module.configuration.server, module.configuration.port, {}));
+    module.server = new Server(module.configuration.server, module.configuration.port, {});
+    module.client = new Db(module.configuration.db, module.server);
     
     /**
      * Mongo db collection function
@@ -49,7 +50,7 @@ var mongo = (function () {
                         module.client.collection(name, function (err, coll) {
                             c(err, coll);
                         });
-                    }                    
+                    }
                 });
             },
             
@@ -88,6 +89,7 @@ var mongo = (function () {
                             callback(err, pushed);
                         });
                     } catch(err) {
+                        module.client.close();
                         callback(err, null);
                     }
                 });
@@ -129,6 +131,7 @@ var mongo = (function () {
                             callback(err, doc);
                         });
                     } catch(err) {
+                        module.client.close();
                         callback(err, null);
                     }
                 });
@@ -151,6 +154,7 @@ var mongo = (function () {
                             callback(err, doc);
                         });
                     } catch(err) {
+                        module.client.close();
                         callback(err, null);
                     }
                 });
@@ -172,9 +176,11 @@ var mongo = (function () {
                     try {
                         bsonId = new module.client.bson_serializer.ObjectID(itemId);
                         coll.update({ _id: bsonId }, { $set : obj }, { safe:true }, function(err) {
+                            module.client.close();
                             callback(err);
                         });
                     } catch(err) {
+                        module.client.close();
                         callback(err, null);
                     }
                 });
@@ -211,6 +217,7 @@ var mongo = (function () {
                             });
                         }
                     } catch(err) {
+                        module.client.close();
                         callback(err, null);
                     }
                 });

@@ -1,0 +1,19 @@
+{
+  "author": "Giovanni Ferron <info@gvnn.it> (http://www.gvnn.it)",
+  "name": "flatwhite",
+  "description": "Node.js REST CMS",
+  "version": "0.1.0",
+  "homepage": "http://github.com/gvnn/flatwhite",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gvnn/flatwhite.git"
+  },
+  "dependencies": {
+    "mongodb": "1.0.0",
+    "connect": "1.8.5",
+    "nodeunit": "0.6.2"
+  },
+  "engines": {
+    "node": "*"
+  }
+}

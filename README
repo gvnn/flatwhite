@@ -1,19 +1,18 @@
 Flatwhite (http://en.wikipedia.org/wiki/Flat_white)
 
-Node.js REST API only CMS, built for quick mobile applications.
+Node.js REST CMS, built for quick mobile applications.
 
 Requirements
 -------------
 
-  Node.js, 0.6 or higher: http://nodejs.org/
-  Connect, 1.8.5 or higher: http://senchalabs.github.com/connect/
-  nodeunit, 0.6.2 or higher: https://github.com/caolan/nodeunit
+  Node.js, 0.6 or higher
+  Connect, 1.8.5
+  nodeunit, 0.6.2
   
 License
 -------------
 
 Flatwhite is released under the MIT license
-
 
 Database
 -------------
