@@ -7,7 +7,7 @@ var config = {
         showStack: true,
         dumpExceptions: true
     },
-    //auth: 'basicDatabase',
+    auth: 'basicDatabase',
     data: {
         collectionsPrefix: "fw_",
         selectedRepository: 0,

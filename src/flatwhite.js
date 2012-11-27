@@ -19,13 +19,6 @@ var loader = function(method, req, res, next) {
 //create server
 var server = connect.createServer();
 
-//check authentication required
-if(config.auth) {
-    utils.log("authentication: " + config.auth);
-    _auth = require("./modules/auth/" + config.auth);
-    server.use('/', _auth.authenticate);
-}
-
 //add body parser for post
 server.use(connect.bodyParser({uploadDir: config.files.tmpDir}));
 
@@ -48,6 +41,13 @@ fs.realpath(config.files.repoDir, function(err, resolvedPath) {
 
 //add parser for querystring
 server.use(connect.query());
+
+//check authentication required
+if(config.auth) {
+    utils.log("authentication: " + config.auth);
+    _auth = require("./modules/auth/" + config.auth);
+    server.use('/', _auth.authenticate);
+}
 
 //set routes
 server.use('/',
