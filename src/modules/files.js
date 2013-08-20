@@ -132,7 +132,7 @@ var files = (function () {
         var orderObj = {};
         orderObj[orderby] = (orderdirection == "asc" ? 1 : -1);
         
-        data.instance().collection("items").list({}, queryFields, callback, skip, size, orderObj);
+        data.instance().collection("files").list({}, queryFields, callback, skip, size, orderObj);
     };
     
     return module;
