@@ -59,10 +59,10 @@ var files = (function () {
                 data.instance().collection("files").add(
                         {
                             "tmpPath": req.files[file].path,
-                            "filename": req.files[file].filename,
-                            "length": req.files[file].length,
+                            "filename": req.files[file].name,
+							"size": req.files[file].size,
                             "type": req.files[file].type,
-                            "extension": utils.getFileExtension(req.files[file].filename)
+                            "extension": utils.getFileExtension(req.files[file].name)
                         },
                         function(err, obj) {
                             if(err) {
@@ -71,7 +71,7 @@ var files = (function () {
                             } else {
                                 //move file
                                 fs.rename(obj.tmpPath, 
-                                        config.files.repoDir + "/" + obj._id + "." + utils.getFileExtension(obj.filename), 
+                                        config.files.repoDir + "/" + obj._id + "." + utils.getFileExtension(obj.name), 
                                         function() {
                                             //response obj
                                             utils.log("item uploaded successfully");
